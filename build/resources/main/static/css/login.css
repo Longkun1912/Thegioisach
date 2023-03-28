@@ -1,0 +1,53 @@
+#form-container{
+    background-image: url('https://i.pinimg.com/736x/23/cb/71/23cb7143f892c49537c8a55f5ee21988.jpg');
+    display: flex;
+    justify-content: center;
+    background-size: cover;
+}
+#login-form{
+    background-color: white;
+    width: 600px;
+    border-radius: 12px;
+    margin-top: 8%;
+}
+#login-label{
+    text-align: center;
+    margin-top: 4%;
+}
+#input-error{
+    margin-left: 10%;
+    margin-top: 5%;
+    height: 15%;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+}
+#input-form{
+    width: 450px;
+    display: flex;
+    margin-top: 5%;
+}
+#input-label{
+    flex-basis: 30%;
+    margin-left: 5%;
+}
+#input-data{
+    flex-basis: 70%;
+    margin-left: 5%;
+}
+#login-submit{
+    width: 485px;
+    margin-top: 7%;
+    margin-left: 10%;
+    height: 15%;
+}
+::-ms-reveal {
+    display: none;
+}
+#togglePass{
+    cursor: pointer;
+}
+#show_hide_password{
+    width: 140%;
+    margin-top: 10%;
+}

@@ -1,0 +1,50 @@
+package org.example.entity;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+@Entity
+@Table(name = "posts")
+@Getter
+@Setter
+@RequiredArgsConstructor
+public class Post {
+    @Id
+    private UUID id;
+
+    @Column
+    private String title;
+
+    @Column
+    private byte[] content_image;
+
+    @Column
+    private String content_text;
+
+    @Column
+    private LocalDateTime created_time;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Like> likes;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Dislike> dislikes;
+
+    // A post created by only one user
+    @ManyToOne
+    private User creator;
+
+    // A post can be shared to many users
+    @ManyToMany(mappedBy = "sharedPosts", cascade = CascadeType.ALL)
+    private List<User> sharedBy = new ArrayList<>();
+}
