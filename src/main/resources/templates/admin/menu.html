@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Menu Bar</title>
     <link rel="stylesheet" th:href="@{/css/admin/dashboard.css}" />
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 </head>
 <body>
@@ -34,9 +33,9 @@
       </a>
     </li>
     <li>
-      <a th:href="@{/admin/product-index}">
-        <i class='bx bx-box' ></i>
-        <span class="links_name">Products</span>
+      <a th:href="@{/admin/book-index}">
+        <i class='bx bx-book-open'></i>
+        <span class="links_name">Books</span>
       </a>
     </li>
     <li>
@@ -52,7 +51,7 @@
       </a>
     </li>
     <li class="log_out">
-      <a th:href="@{/admin/logout}">
+      <a th:href="@{/logout}">
         <i class='bx bx-log-out'></i>
         <span class="links_name">Log out</span>
       </a>

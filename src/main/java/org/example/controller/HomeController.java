@@ -95,9 +95,9 @@ public class HomeController {
             // Construct a new filename based on the user's email (or any other value)
             String newFilename = userRegisterDTO.getUsername() + "." + extension;
             // Save the uploaded file to the specified directory
-            Path path = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\img\\customer\\" + newFilename);
+            Path path = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\img\\user\\" + newFilename);
             Files.write(path, file.getBytes());
-            // Set the image attribute of the Staff object to the new filename
+            // Set the image attribute of the User object to the new filename
             user.setImage(file.getBytes());
             user.setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
             user.setRole(roleRepository.findRoleByName("user"));
@@ -130,8 +130,8 @@ public class HomeController {
             if(role.contains("admin")){
                 return "redirect:/admin/dashboard";
             }
-            else if (role.contains("customer")){
-                return "redirect:/customer/home-page";
+            else if (role.contains("user")){
+                return "redirect:/user/home-page";
             }
             else{
                 return "error_page";
@@ -139,5 +139,10 @@ public class HomeController {
         } else {
             return "error_page";
         }
+    }
+
+    @GetMapping(value = "/logout")
+    public String logOut(){
+        return "home";
     }
 }

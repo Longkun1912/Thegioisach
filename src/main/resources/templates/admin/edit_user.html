@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Add New User</title>
+    <title>Edit User</title>
     <link rel="stylesheet" th:href="@{/css/admin/dashboard.css}" />
     <link rel="stylesheet" th:href="@{/css/admin/add-user.css}" />
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -27,7 +27,7 @@
         <nav>
             <div class="sidebar-button">
                 <i class='bx bx-menu sidebarBtn'></i>
-                <span>Add New User</span>
+                <span>Edit User</span>
             </div>
             <button id="personal-profile" th:onclick="window.location.href='/admin/logout'">
                 <span style="border-right: 1px solid #ccc; padding-right: 10px;" th:text="${user_detail.username}"></span>
@@ -36,8 +36,9 @@
         </nav>
         <div class="form-content">
             <div class="form-container">
-                <h1 style="padding-top: 3%; text-align: center;">Create New Account</h1>
-                <form th:action="@{/admin/add-user}" th:object="${user}" enctype="multipart/form-data" th:method="post" style="padding-top: 4%">
+                <h1 style="padding-top: 3%; text-align: center;">Edit User</h1>
+                <form th:action="@{/admin/edit-user}" th:object="${edit_user}" enctype="multipart/form-data" th:method="post" style="padding-top: 4%">
+                    <input type="hidden" th:name="id" th:value="${edit_user.id}"/>
                     <div class="row">
                         <div class="col-md-6 mb-4">
                             <div class="form-outline" style="margin-left: 10%;">
@@ -231,7 +232,7 @@
                     <div class="d-flex justify-content-center">
                         <button id="confirm-adding" type=submit
                                 class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
-                            Confirm Adding
+                            Confirm Editing
                         </button>
                     </div>
                 </form>

@@ -459,3 +459,8 @@ nav .profile-details i{
     margin-right: -15px;
     background-color: #2697FF;
 }
+html {
+    height: 100%;
+    overflow-y: scroll;
+}
+

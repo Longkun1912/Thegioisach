@@ -1,14 +1,21 @@
-#form-container{
+html {
+    height: 100%;
+    overflow-y: scroll;
+}
+body{
     background-image: url('https://i.pinimg.com/736x/23/cb/71/23cb7143f892c49537c8a55f5ee21988.jpg');
+    background-size: cover;
+}
+#form-container{
     display: flex;
     justify-content: center;
-    background-size: cover;
 }
 #login-form{
     background-color: white;
+    height: 400px;
     width: 600px;
     border-radius: 12px;
-    margin-top: 8%;
+    margin-top: 10%;
 }
 #login-label{
     text-align: center;
@@ -36,10 +43,11 @@
     margin-left: 5%;
 }
 #login-submit{
-    width: 485px;
+    width: 90%;
     margin-top: 7%;
-    margin-left: 10%;
+    margin-left: 5%;
     height: 15%;
+    font-size: 100%;
 }
 ::-ms-reveal {
     display: none;

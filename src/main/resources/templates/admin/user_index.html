@@ -20,7 +20,7 @@
                 <span>User Index</span>
             </div>
             <button id="personal-profile" th:onclick="window.location.href='/admin/logout'">
-                <span style="border-right: 1px solid #ccc; padding-right: 10px;" th:text="${user.username}"></span>
+                <span style="border-right: 1px solid #ccc; padding-right: 10px;" th:text="${user_detail.username}"></span>
                 <span id="personal-role" th:text="${role}"></span>
             </button>
         </nav>
@@ -55,8 +55,8 @@
                     <td th:text="${user.status}"></td>
                     <td th:text="${user.last_updated}"></td>
                     <td>
-                        <button type="button" class="btn btn-primary" th:onclick="">Edit</button>
-                        <button type="button" class="btn btn-danger" th:onclick="">Delete</button>
+                        <a type="button" class="btn btn-primary" th:href="@{/admin/edit-user/{id}(id=@{${user.id}})}">Edit</a>
+                        <a type="button" class="btn btn-danger" th:href="@{/admin/delete-user/{id}(id=@{${user.id}})}">Delete</a>
                     </td>
                 </tr>
                 </tbody>

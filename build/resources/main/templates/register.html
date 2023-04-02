@@ -116,8 +116,8 @@
                                     ></div>
                                 </div>
 
-                                <div class="form-outline mb-4" id="upload-image">
-                                    <label class="form-check-label">Upload staff image: </label>
+                                <div class="form-outline mb-4">
+                                    <label class="form-check-label">Upload user image: </label>
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="customFile" name="file">
                                     </div>
@@ -149,7 +149,7 @@
                                     <button type=submit class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Register</button>
                                 </div>
 
-                                <p class="text-center text-muted mt-5 mb-0">Have already an account? <a href="#!" class="fw-bold text-body"><u>Login here</u></a></p>
+                                <p class="text-center text-muted mt-5 mb-0">Already have an account? <a th:href="@{/login}" class="fw-bold text-body"><u>Login here</u></a></p>
 
                             </form>
 
@@ -163,7 +163,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script th:src="@{assets/password-strength-meter/password.min.js}"></script>
 <script th:src="@{assets/custom-file-input/bs-custom-file-input.js}"></script>
-<script th:src="@{/js/register.js}"></script>
+<script th:src="@{/js/show-hide-password.js}"></script>
 <script>
     bsCustomFileInput.init();
 </script>

@@ -29,7 +29,7 @@ public class AccountConfig {
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
                 .antMatchers("/admin/**").hasAnyAuthority("admin")
-                .antMatchers("/customer/**").hasAnyAuthority("customer","admin")
+                .antMatchers("/user/**").hasAnyAuthority("user","admin")
                 .and()
                 .formLogin()
                 .loginPage("/login")

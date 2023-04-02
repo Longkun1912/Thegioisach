@@ -19,7 +19,7 @@ public class Book {
     private int id;
 
     @Column
-    private String name;
+    private String title;
 
     @Column
     private String author;
@@ -38,6 +38,9 @@ public class Book {
 
     @Column
     private byte[] content;
+
+    @Column
+    private int recommended_age;
 
     @ManyToOne
     @JoinColumn(name = "book_category", nullable = false)
