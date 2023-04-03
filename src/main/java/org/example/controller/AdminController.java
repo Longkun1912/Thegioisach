@@ -35,6 +35,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Controller
@@ -381,54 +382,58 @@ public class AdminController {
     @GetMapping(value = "/add-book")
     public String addBook(Model model){
         updateModel(model);
-        model.addAttribute("categories", getCategories());
-        model.addAttribute("ages", getAge());
+        updateBookInfoModel(model);
         model.addAttribute("book", new BookDTO());
         return "admin/add_book";
     }
 
     @PostMapping(value = "/add-book")
-    public String addBookForm(@ModelAttribute("book") @Valid BookDTO bookDTO, BindingResult result, Model model,
-                              @RequestParam(value = "published_date") LocalDate published_date,
-                              @RequestParam(value = "book_image") MultipartFile book_image,
-                              @RequestParam(value = "book_content") MultipartFile book_content) throws IOException {
+    public String addBookForm(@ModelAttribute("book") @Valid BookDTO bookDTO, BindingResult result, Model model) throws IOException {
         if(result.hasErrors()){
             updateModel(model);
+            updateBookInfoModel(model);
             return "admin/add_book";
         }
-        else if(book_image == null || book_image.isEmpty()){
+        else if(bookDTO.getImage_file() == null || bookDTO.getImage_file().isEmpty()){
             updateModel(model);
-            result.rejectValue("image",null,"Please upload the book image.");
+            updateBookInfoModel(model);
+            result.rejectValue("image_file",null,"Please upload the book image.");
             return "admin/add_book";
         }
-        else if(!Objects.requireNonNull(book_image.getContentType()).startsWith("image/")){
+        else if(!Objects.requireNonNull(bookDTO.getImage_file().getContentType()).startsWith("image/")){
             updateModel(model);
-            result.rejectValue("image",null,"Please upload only image files.");
+            updateBookInfoModel(model);
+            result.rejectValue("image_file",null,"Please upload only image files.");
             return "admin/add_book";
         }
-        else if(book_content == null || book_content.isEmpty()){
+        else if(bookDTO.getContent_file() == null || bookDTO.getContent_file().isEmpty()){
             updateModel(model);
-            result.rejectValue("content",null,"Please upload the book content.");
+            updateBookInfoModel(model);
+            result.rejectValue("content_file",null,"Please upload the book content.");
             return "admin/add_book";
         }
-        else if(!Objects.requireNonNull(book_content.getContentType()).equals("application/pdf")){
+        else if(!Objects.requireNonNull(bookDTO.getContent_file().getContentType()).equals("application/pdf")){
             updateModel(model);
-            result.rejectValue("content",null,"Please upload only pdf files.");
+            updateBookInfoModel(model);
+            result.rejectValue("content_file",null,"Please upload only pdf files.");
             return "admin/add_book";
         }
         else {
-            Book book = mapper.BookDtoToBook(bookDTO);
             // Path to store book images
-            Path image_path = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\img\\book\\" + transferBookFile(book_image, bookDTO));
+            Path image_path = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\img\\book\\" + transferBookFile(bookDTO.getImage_file(), bookDTO));
             // Path to store book contents
-            Path content_path = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\file\\book\\" + transferBookFile(book_content, bookDTO));
+            Path content_path = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\file\\book\\" + transferBookFile(bookDTO.getContent_file(), bookDTO));
             // Save data paths to the files
-            Files.write(image_path, book_image.getBytes());
-            Files.write(content_path, book_content.getBytes());
-            book.setImage(book_image.getBytes());
-            book.setContent(book_content.getBytes());
+            Files.write(image_path, bookDTO.getImage_file().getBytes());
+            Files.write(content_path, bookDTO.getContent_file().getBytes());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate date = LocalDate.parse(bookDTO.getPublished_date(), formatter);
+            Book book = mapper.BookDtoToBook(bookDTO);
+            book.setImage(bookDTO.getImage_file().getBytes());
+            book.setContent(bookDTO.getContent_file().getBytes());
             book.setCategory(categoryRepository.findCategoryByName(bookDTO.getCategory_name()).get());
-            book.setPublished_date(published_date);
+            book.setRecommended_age(Integer.parseInt(bookDTO.getRecommended_age()));
+            book.setPublished_date(date);
             bookRepository.save(book);
             return "redirect:/admin/book-index";
         }
@@ -442,6 +447,10 @@ public class AdminController {
 
     private List<String> getCategories(){
         return categoryRepository.findAll().stream().map(Category::getName).toList();
+    }
+
+    private List<String> getAgeToString(List<Integer> ages){
+        return ages.stream().map(Objects::toString).collect(Collectors.toList());
     }
 
     private List<Integer> getAge(){
@@ -464,6 +473,12 @@ public class AdminController {
         roles.add("admin");
         roles.add("user");
         return roles;
+    }
+
+    private void updateBookInfoModel(Model model){
+        List<String> ages = getAgeToString(getAge());
+        model.addAttribute("categories", getCategories());
+        model.addAttribute("ages", ages);
     }
 
     private void updateModel(Model model){

@@ -2,10 +2,12 @@ package org.example.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 
 @Data
 public class BookDTO {
@@ -17,18 +19,20 @@ public class BookDTO {
     private String title;
 
     @JsonProperty
-    private byte[] image;
+    private MultipartFile image_file;
 
     @JsonProperty
     @NotEmpty(message = "This field cannot be empty.")
     private String author;
 
     @JsonProperty
-    @NotNull(message = "This field cannot be empty.")
-    private LocalDate published_date;
+    @NotEmpty(message = "Please select the published date.")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    private String published_date;
 
     @JsonProperty
-    @NotEmpty(message = "This field cannot be empty.")
+    @Min(value = 1, message = "Page number must be greater than or equal to 1.")
+    @Max(value = 1000, message = "Page number must be less than or equal to 1000.")
     private int page;
 
     @JsonProperty
@@ -36,11 +40,11 @@ public class BookDTO {
     private String description;
 
     @JsonProperty
-    private byte[] content;
+    private MultipartFile content_file;
 
     @JsonProperty
     @NotEmpty(message = "You must select a recommended age.")
-    private int recommended_age;
+    private String recommended_age;
 
     @JsonProperty
     @NotEmpty(message = "You must select a category.")

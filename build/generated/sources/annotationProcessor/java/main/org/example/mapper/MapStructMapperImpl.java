@@ -1,5 +1,6 @@
 package org.example.mapper;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-04-02T20:28:43+0700",
+    date = "2023-04-03T20:59:27+0700",
     comments = "version: 1.5.2.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.4.jar, environment: Java 17.0.5 (Amazon.com Inc.)"
 )
 @Component
@@ -273,19 +274,13 @@ public class MapStructMapperImpl implements MapStructMapper {
 
         bookDTO.setId( book.getId() );
         bookDTO.setTitle( book.getTitle() );
-        byte[] image = book.getImage();
-        if ( image != null ) {
-            bookDTO.setImage( Arrays.copyOf( image, image.length ) );
-        }
         bookDTO.setAuthor( book.getAuthor() );
-        bookDTO.setPublished_date( book.getPublished_date() );
+        if ( book.getPublished_date() != null ) {
+            bookDTO.setPublished_date( DateTimeFormatter.ISO_LOCAL_DATE.format( book.getPublished_date() ) );
+        }
         bookDTO.setPage( book.getPage() );
         bookDTO.setDescription( book.getDescription() );
-        byte[] content = book.getContent();
-        if ( content != null ) {
-            bookDTO.setContent( Arrays.copyOf( content, content.length ) );
-        }
-        bookDTO.setRecommended_age( book.getRecommended_age() );
+        bookDTO.setRecommended_age( String.valueOf( book.getRecommended_age() ) );
 
         return bookDTO;
     }
@@ -301,18 +296,14 @@ public class MapStructMapperImpl implements MapStructMapper {
         book.setId( bookDTO.getId() );
         book.setTitle( bookDTO.getTitle() );
         book.setAuthor( bookDTO.getAuthor() );
-        book.setPublished_date( bookDTO.getPublished_date() );
+        if ( bookDTO.getPublished_date() != null ) {
+            book.setPublished_date( LocalDate.parse( bookDTO.getPublished_date() ) );
+        }
         book.setPage( bookDTO.getPage() );
         book.setDescription( bookDTO.getDescription() );
-        byte[] image = bookDTO.getImage();
-        if ( image != null ) {
-            book.setImage( Arrays.copyOf( image, image.length ) );
+        if ( bookDTO.getRecommended_age() != null ) {
+            book.setRecommended_age( Integer.parseInt( bookDTO.getRecommended_age() ) );
         }
-        byte[] content = bookDTO.getContent();
-        if ( content != null ) {
-            book.setContent( Arrays.copyOf( content, content.length ) );
-        }
-        book.setRecommended_age( bookDTO.getRecommended_age() );
 
         return book;
     }

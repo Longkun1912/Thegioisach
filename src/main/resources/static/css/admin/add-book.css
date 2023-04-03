@@ -4,6 +4,9 @@
 }
 
 #date-input {
+    height: 45px !important;
+    margin-left: 67px;
+    width: 400px;
     padding: 10px 20px 10px 20px;
     border: 1px solid lightgrey !important;
     border-radius: 6px !important;
@@ -92,7 +95,26 @@ thead tr:nth-child(3) th {
 
 #form-container{
     width: 1000px;
+    padding-bottom: 3%;
     background-color: antiquewhite;
     margin-left: 10%;
     padding-top: 10%;
+}
+
+#description{
+    margin-left: 5%;
+    border: 1px solid;
+    width: 875px;
+    margin-top: 1%;
+}
+
+#adding-submission{
+    margin-top: 3%;
+    margin-left: 3%;
+    height: 50px;
+    width: 875px;
+}
+
+.form-check-input[type=radio]:checked:after{
+    left: 16% !important;
 }
