@@ -1,6 +1,5 @@
 package org.example.mapper;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-04-03T20:59:27+0700",
+    date = "2023-04-05T00:52:20+0700",
     comments = "version: 1.5.2.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.4.jar, environment: Java 17.0.5 (Amazon.com Inc.)"
 )
 @Component
@@ -275,9 +274,6 @@ public class MapStructMapperImpl implements MapStructMapper {
         bookDTO.setId( book.getId() );
         bookDTO.setTitle( book.getTitle() );
         bookDTO.setAuthor( book.getAuthor() );
-        if ( book.getPublished_date() != null ) {
-            bookDTO.setPublished_date( DateTimeFormatter.ISO_LOCAL_DATE.format( book.getPublished_date() ) );
-        }
         bookDTO.setPage( book.getPage() );
         bookDTO.setDescription( book.getDescription() );
         bookDTO.setRecommended_age( String.valueOf( book.getRecommended_age() ) );
@@ -296,9 +292,6 @@ public class MapStructMapperImpl implements MapStructMapper {
         book.setId( bookDTO.getId() );
         book.setTitle( bookDTO.getTitle() );
         book.setAuthor( bookDTO.getAuthor() );
-        if ( bookDTO.getPublished_date() != null ) {
-            book.setPublished_date( LocalDate.parse( bookDTO.getPublished_date() ) );
-        }
         book.setPage( bookDTO.getPage() );
         book.setDescription( bookDTO.getDescription() );
         if ( bookDTO.getRecommended_age() != null ) {

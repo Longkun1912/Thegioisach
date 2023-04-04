@@ -28,7 +28,7 @@ public class BookDTO {
     @JsonProperty
     @NotEmpty(message = "Please select the published date.")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private String published_date;
+    private String published_day;
 
     @JsonProperty
     @Min(value = 1, message = "Page number must be greater than or equal to 1.")

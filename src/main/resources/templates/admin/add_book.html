@@ -147,14 +147,14 @@
               <label for="date-input" style="margin-left: 10%;">Select Published Date:</label>
               <div class="row d-flex justify-content-sm-center px-2">
                   <div class="form-group row">
-                    <input type="text" id="date-input" class="datepicker mr-2" placeholder="Select Date" name="published_date"><br>
+                    <input type="text" id="date-input" class="datepicker mr-2" placeholder="Select Date" name="published_day"><br>
                   </div>
               </div>
               <div
                       class="alert alert-warning"
                       style="width: 400px; margin-left: 10%; margin-top: -3%;"
-                      th:if="${#fields.hasErrors('published_date')}"
-                      th:errors="*{published_date}"
+                      th:if="${#fields.hasErrors('published_day')}"
+                      th:errors="*{published_day}"
               ></div>
             </div>
             <div class="col-md-6 mb-4" style="margin-top: -2%;">

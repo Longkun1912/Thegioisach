@@ -1,28 +1,33 @@
 package org.example.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.tika.Tika;
+import org.example.domain.BookDTO;
 import org.example.domain.BookDetailsDTO;
 import org.example.domain.BookImageData;
-import org.example.domain.CategoryDTO;
 import org.example.entity.Book;
 import org.example.entity.Category;
 import org.example.mapper.MapStructMapper;
 import org.example.repository.BookRepository;
-import org.example.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
 public class BookService {
     private final BookRepository bookRepository;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
     private final MapStructMapper mapper;
 
     public List<BookDetailsDTO> getFilteredBooks(Category category, LocalDate startDate, LocalDate endDate, Integer recommended_age){
@@ -57,5 +62,52 @@ public class BookService {
         String mimeType = tika.detect(image);
         String base64EncodedImage = Base64.getEncoder().encodeToString(image);
         return new BookImageData(book, mimeType, base64EncodedImage);
+    }
+
+    public String transferBookFile(MultipartFile file, BookDTO bookDTO){
+        String originalFilename = file.getOriginalFilename();
+        String extension = FilenameUtils.getExtension(originalFilename);
+        return bookDTO.getTitle() + "." + extension;
+    }
+
+    public List<String> getAgeToString(List<Integer> ages){
+        return ages.stream().map(Objects::toString).collect(Collectors.toList());
+    }
+
+    public List<Integer> getAge(){
+        List<Integer> ages = new ArrayList<>();
+        ages.add(6);
+        ages.add(12);
+        ages.add(16);
+        return ages;
+    }
+
+    public void updateBookInfoModel(Model model){
+        List<String> ages = getAgeToString(getAge());
+        model.addAttribute("categories", categoryService.getCategories());
+        model.addAttribute("ages", ages);
+    }
+
+    public void deleteBookFilePath(String title) {
+        Path imagePath = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\img\\book\\");
+        Path filePath = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\file\\book\\");
+        deleteFileIfExists(imagePath,title);
+        deleteFileIfExists(filePath,title);
+    }
+
+    private void deleteFileIfExists(Path selected_path, String title) {
+        try (Stream<Path> walk = Files.walk(selected_path)) {
+            Optional<Path> selected_file = walk
+                    .filter(Files::isRegularFile)
+                    .filter(path -> path.getFileName().toString().contains(title))
+                    .findFirst();
+            if (selected_file.isPresent()) {
+                Files.delete(selected_file.get());
+            } else {
+                System.out.println("File not found");
+            }
+        } catch (IOException e) {
+            System.out.println("Error.");
+        }
     }
 }

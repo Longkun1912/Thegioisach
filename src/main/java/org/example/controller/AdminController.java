@@ -14,6 +14,8 @@ import org.example.repository.CategoryRepository;
 import org.example.repository.RoleRepository;
 import org.example.repository.UserRepository;
 import org.example.service.BookService;
+import org.example.service.CategoryService;
+import org.example.service.UserService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,11 +46,13 @@ import java.util.stream.Stream;
 public class AdminController {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final MapStructMapper mapper;
-    private final PasswordEncoder passwordEncoder;
     private final CategoryRepository categoryRepository;
     private final BookRepository bookRepository;
+    private final UserService userService;
     private final BookService bookService;
+    private final CategoryService categoryService;
+    private final MapStructMapper mapper;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping(value = "/dashboard")
     public String register(Model model){
@@ -62,14 +66,14 @@ public class AdminController {
             return "forbidden_page";
         }
         else {
-            addUserAttributesToModel(model);
+            userService.addUserAttributesToModel(model);
             return "admin/dashboard";
         }
     }
 
     @GetMapping(value = "/user-index")
     public String userIndex(Model model){
-        addUserAttributesToModel(model);
+        userService.addUserAttributesToModel(model);
         Role role = roleRepository.findRoleByName("user");
         List<User> users = userRepository.findUserByRole(role);
         List<UserDetailsDTO> userDetailsDTOS = new ArrayList<>();
@@ -92,7 +96,7 @@ public class AdminController {
 
     @GetMapping(value = "/add-user")
     public String addUser(Model model){
-        updateModel(model);
+        userService.updateModel(model);
         model.addAttribute("user",new UserDTO());
         return "admin/add_user";
     }
@@ -101,36 +105,36 @@ public class AdminController {
     public String addUserForm(@ModelAttribute("user") @Valid UserDTO userDTO, BindingResult result, Model model,
                               @RequestParam(value = "file",required = false) MultipartFile file) throws IOException{
         if(result.hasErrors()){
-            updateModel(model);
+            userService.updateModel(model);
             return "admin/add_user";
         }
         else if (userRepository.findUserByName(userDTO.getUsername()).isPresent()) {
-            updateModel(model);
+            userService.updateModel(model);
             result.rejectValue("username",null,"Username already exists.");
             return "admin/add_user";
         }
         else if (userRepository.findUserByEmail(userDTO.getEmail()).isPresent()) {
-            updateModel(model);
+            userService.updateModel(model);
             result.rejectValue("email",null,"Email already exists.");
             return "admin/add_user";
         }
         else if (userRepository.findUserByPhoneNumber(userDTO.getPhone_number()).isPresent()) {
-            updateModel(model);
+            userService.updateModel(model);
             result.rejectValue("phone_number",null,"Phone number already exists.");
             return "admin/add_user";
         }
         else if(!Objects.equals(userDTO.getPassword(), userDTO.getConfirm_password())){
-            updateModel(model);
+            userService.updateModel(model);
             result.rejectValue("confirm_password",null,"Confirm password does not match.");
             return "admin/add_user";
         }
         else if(file == null || file.isEmpty()){
-            updateModel(model);
+            userService.updateModel(model);
             result.rejectValue("image",null,"Please upload your image.");
             return "admin/add_user";
         }
         else if(!Objects.requireNonNull(file.getContentType()).startsWith("image/")){
-            updateModel(model);
+            userService.updateModel(model);
             result.rejectValue("image",null,"Please upload only image files.");
             return "admin/add_user";
         }
@@ -148,22 +152,20 @@ public class AdminController {
             if (userDTO.getInput_role().contains("admin")){
                 path = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\img\\admin\\" + newFilename);
             }
-            Files.write(path, file.getBytes());
             // Set the image attribute of the User object to the new filename
             user.setImage(file.getBytes());
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             user.setRole(roleRepository.findRoleByName(userDTO.getInput_role()));
             user.setLast_updated(LocalDateTime.now());
             userRepository.save(user);
-            System.out.println(user);
-            user = null;
+            Files.write(path, file.getBytes());
             return "redirect:/admin/user-index";
         }
     }
 
     @GetMapping(value = "/edit-user/{id}")
     public String editUser(@PathVariable("id") UUID user_id, Model model){
-        updateModel(model);
+        userService.updateModel(model);
         Optional<User> existing_user = Optional.of(userRepository.findById(user_id).orElseThrow());
         UserDTO userDTO = mapper.userDto(existing_user.get());
         model.addAttribute("edit_user", userDTO);
@@ -174,46 +176,44 @@ public class AdminController {
     public String editUserForm(@ModelAttribute("edit_user") @Valid UserDTO userDTO, BindingResult result, Model model,
                                @RequestParam(value = "file",required = false) MultipartFile file) throws IOException{
         if(result.hasErrors()){
-            updateModel(model);
+            userService.updateModel(model);
             return "admin/edit_user";
         }
         else if (userRepository.findUserByName(userDTO.getUsername()).isPresent()) {
-            updateModel(model);
+            userService.updateModel(model);
             result.rejectValue("username",null,"Username already exists.");
             return "admin/edit_user";
         }
         else if (userRepository.findUserByEmail(userDTO.getEmail()).isPresent()) {
-            updateModel(model);
+            userService.updateModel(model);
             result.rejectValue("email",null,"Email already exists.");
             return "admin/edit_user";
         }
         else if (userRepository.findUserByPhoneNumber(userDTO.getPhone_number()).isPresent()) {
-            updateModel(model);
+            userService.updateModel(model);
             result.rejectValue("phone_number",null,"Phone number already exists.");
             return "admin/edit_user";
         }
         else if(!Objects.equals(userDTO.getPassword(), userDTO.getConfirm_password())){
-            updateModel(model);
+            userService.updateModel(model);
             result.rejectValue("confirm_password",null,"Confirm password does not match.");
             return "admin/edit_user";
         }
         else if(file == null || file.isEmpty()){
-            updateModel(model);
+            userService.updateModel(model);
             result.rejectValue("image",null,"Please upload your image.");
             return "admin/edit_user";
         }
         else if(!Objects.requireNonNull(file.getContentType()).startsWith("image/")){
-            updateModel(model);
+            userService.updateModel(model);
             result.rejectValue("image",null,"Please upload only image files.");
             return "admin/edit_user";
         }
         else {
             Optional<User> existed_user = userRepository.findById(userDTO.getId());
             if(existed_user.isPresent()){
-                User updated_user = mapper.userDtoToUser(userDTO);
-                updated_user.setId(userDTO.getId());
-                updated_user.setRole(roleRepository.findRoleByName(userDTO.getInput_role()));
-                updated_user.setLast_updated(LocalDateTime.now());
+                // Delete user old image from file path
+                userService.deleteUserImagePath(existed_user.get().getUsername());
                 // Get the original filename of the uploaded file
                 String originalFilename = file.getOriginalFilename();
                 // Extract the file extension
@@ -225,41 +225,32 @@ public class AdminController {
                 if (userDTO.getInput_role().contains("admin")){
                     path = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\img\\admin\\" + newFilename);
                 }
-                Files.write(path, file.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                // Map User entity and save to database
+                User updated_user = mapper.userDtoToUser(userDTO);
+                updated_user.setId(userDTO.getId());
+                updated_user.setRole(roleRepository.findRoleByName(userDTO.getInput_role()));
+                updated_user.setLast_updated(LocalDateTime.now());
                 // Set the image attribute of the User object to the new filename
                 updated_user.setImage(file.getBytes());
                 updated_user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
                 userRepository.save(updated_user);
+                Files.write(path, file.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
             }
             return "redirect:/admin/user-index";
         }
     }
 
     @GetMapping("/delete-user/{id}")
-    public String deleteStaff(@PathVariable("id") UUID user_id){
+    public String deleteUser(@PathVariable("id") UUID user_id){
         Optional<User> user = Optional.of(userRepository.findById(user_id).orElseThrow());
-        String username = user.get().getUsername();
-        Path imagePath = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\img\\user");
-        try (Stream<Path> walk = Files.walk(imagePath)) {
-            Optional<Path> image = walk
-                    .filter(Files::isRegularFile)
-                    .filter(path -> path.getFileName().toString().contains(username))
-                    .findFirst();
-            if (image.isPresent()) {
-                Files.delete(image.get());
-            } else {
-                System.out.println("Image not found");
-            }
-        } catch (IOException e) {
-            System.out.println("Error.");
-        }
+        userService.deleteUserImagePath(user.get().getUsername());
         userRepository.delete(user.get());
         return "redirect:/admin/user-index";
     }
 
     @GetMapping(value = "/category-index")
     public String viewCategory(Model model){
-        updateModel(model);
+        userService.updateModel(model);
         List<Category> categories = categoryRepository.findAll();
         model.addAttribute("categories",categories);
         return "admin/category_index";
@@ -267,7 +258,7 @@ public class AdminController {
 
     @GetMapping(value = "/add-category")
     public String addCategory(Model model){
-        updateModel(model);
+        userService.updateModel(model);
         model.addAttribute("category", new CategoryDTO());
         return "admin/add_category";
     }
@@ -276,11 +267,11 @@ public class AdminController {
     public String addCategoryForm(@ModelAttribute("category") @Valid CategoryDTO categoryDTO,
                                   BindingResult result, Model model){
         if(result.hasErrors()){
-            updateModel(model);
+            userService.updateModel(model);
             return "admin/add_category";
         }
         else if (categoryRepository.findCategoryByName(categoryDTO.getName()).isPresent()) {
-            updateModel(model);
+            userService.updateModel(model);
             result.rejectValue("name",null,"Category name already exists.");
             return "admin/add_category";
         }
@@ -293,7 +284,7 @@ public class AdminController {
 
     @GetMapping("/edit-category/{id}")
     public String editCategory(@PathVariable("id") int category_id, Model model, RedirectAttributes redirectAttributes){
-        updateModel(model);
+        userService.updateModel(model);
         Optional<Category> category = Optional.of(categoryRepository.findById(category_id).orElseThrow());
         String category_name = category.get().getName();
         System.out.println("Category: " + category_name);
@@ -315,11 +306,11 @@ public class AdminController {
     public String editCategoryForm(@ModelAttribute("edit_category") @Valid CategoryDTO categoryDTO,
                                    BindingResult result, Model model){
         if(result.hasErrors()){
-            updateModel(model);
+            userService.updateModel(model);
             return "admin/edit_category";
         }
         else if (categoryRepository.findCategoryByName(categoryDTO.getName()).isPresent()) {
-            updateModel(model);
+            userService.updateModel(model);
             result.rejectValue("name",null,"Category name already exists.");
             return "admin/edit_category";
         }
@@ -332,7 +323,7 @@ public class AdminController {
 
     @GetMapping("/delete-category/{id}")
     public String deleteCategory(@PathVariable("id") int category_id, Model model, RedirectAttributes redirectAttributes){
-        updateModel(model);
+        userService.updateModel(model);
         Optional<Category> category = Optional.of(categoryRepository.findById(category_id).orElseThrow());
         String category_name = category.get().getName();
         System.out.println("Category: " + category_name);
@@ -356,7 +347,7 @@ public class AdminController {
                             @RequestParam(required = false) Integer recommended_age,
                             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate){
-        updateModel(model);
+        userService.updateModel(model);
         List<BookDetailsDTO> filtered_books;
         // Filter params
         Optional<Category> searched_category = categoryRepository.findCategoryByName(category_name);
@@ -373,16 +364,16 @@ public class AdminController {
             // Filter by params (default list)
             filtered_books = bookService.getFilteredBooks(category,startDate,endDate,recommended_age);
         }
-        model.addAttribute("categories", getCategories());
-        model.addAttribute("ages", getAge());
+        model.addAttribute("categories", categoryService.getCategories());
+        model.addAttribute("ages", bookService.getAge());
         model.addAttribute("books",filtered_books);
         return "admin/book_index";
     }
 
     @GetMapping(value = "/add-book")
     public String addBook(Model model){
-        updateModel(model);
-        updateBookInfoModel(model);
+        userService.updateModel(model);
+        bookService.updateBookInfoModel(model);
         model.addAttribute("book", new BookDTO());
         return "admin/add_book";
     }
@@ -390,44 +381,43 @@ public class AdminController {
     @PostMapping(value = "/add-book")
     public String addBookForm(@ModelAttribute("book") @Valid BookDTO bookDTO, BindingResult result, Model model) throws IOException {
         if(result.hasErrors()){
-            updateModel(model);
-            updateBookInfoModel(model);
+            userService.updateModel(model);
+            bookService.updateBookInfoModel(model);
             return "admin/add_book";
         }
         else if(bookDTO.getImage_file() == null || bookDTO.getImage_file().isEmpty()){
-            updateModel(model);
-            updateBookInfoModel(model);
+            userService.updateModel(model);
+            bookService.updateBookInfoModel(model);
             result.rejectValue("image_file",null,"Please upload the book image.");
             return "admin/add_book";
         }
         else if(!Objects.requireNonNull(bookDTO.getImage_file().getContentType()).startsWith("image/")){
-            updateModel(model);
-            updateBookInfoModel(model);
+            userService.updateModel(model);
+            bookService.updateBookInfoModel(model);
             result.rejectValue("image_file",null,"Please upload only image files.");
             return "admin/add_book";
         }
         else if(bookDTO.getContent_file() == null || bookDTO.getContent_file().isEmpty()){
-            updateModel(model);
-            updateBookInfoModel(model);
+            userService.updateModel(model);
+            bookService.updateBookInfoModel(model);
             result.rejectValue("content_file",null,"Please upload the book content.");
             return "admin/add_book";
         }
         else if(!Objects.requireNonNull(bookDTO.getContent_file().getContentType()).equals("application/pdf")){
-            updateModel(model);
-            updateBookInfoModel(model);
+            userService.updateModel(model);
+            bookService.updateBookInfoModel(model);
             result.rejectValue("content_file",null,"Please upload only pdf files.");
             return "admin/add_book";
         }
         else {
             // Path to store book images
-            Path image_path = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\img\\book\\" + transferBookFile(bookDTO.getImage_file(), bookDTO));
+            Path image_path = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\img\\book\\" + bookService.transferBookFile(bookDTO.getImage_file(), bookDTO));
             // Path to store book contents
-            Path content_path = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\file\\book\\" + transferBookFile(bookDTO.getContent_file(), bookDTO));
-            // Save data paths to the files
-            Files.write(image_path, bookDTO.getImage_file().getBytes());
-            Files.write(content_path, bookDTO.getContent_file().getBytes());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            LocalDate date = LocalDate.parse(bookDTO.getPublished_date(), formatter);
+            Path content_path = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\file\\book\\" + bookService.transferBookFile(bookDTO.getContent_file(), bookDTO));
+            // Convert date from string
+            String published_date = bookDTO.getPublished_day();
+            LocalDate date = LocalDate.parse(published_date.trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+            // Map book entity and save to database
             Book book = mapper.BookDtoToBook(bookDTO);
             book.setImage(bookDTO.getImage_file().getBytes());
             book.setContent(bookDTO.getContent_file().getBytes());
@@ -435,63 +425,88 @@ public class AdminController {
             book.setRecommended_age(Integer.parseInt(bookDTO.getRecommended_age()));
             book.setPublished_date(date);
             bookRepository.save(book);
+            // Save data paths to the files
+            Files.write(image_path, bookDTO.getImage_file().getBytes());
+            Files.write(content_path, bookDTO.getContent_file().getBytes());
             return "redirect:/admin/book-index";
         }
     }
 
-    public String transferBookFile(MultipartFile file, BookDTO bookDTO){
-        String originalFilename = file.getOriginalFilename();
-        String extension = FilenameUtils.getExtension(originalFilename);
-        return bookDTO.getTitle() + "." + extension;
+    @GetMapping(value = "/edit-book/{id}")
+    public String editBook(@PathVariable("id") Integer book_id, Model model){
+        Optional<Book> book = Optional.of(bookRepository.findById(book_id).orElseThrow());
+        BookDTO bookDTO = mapper.bookDto(book.get());
+        userService.updateModel(model);
+        bookService.updateBookInfoModel(model);
+        model.addAttribute("edit_book", bookDTO);
+        return "admin/edit_book";
     }
 
-    private List<String> getCategories(){
-        return categoryRepository.findAll().stream().map(Category::getName).toList();
+    @PostMapping(value = "/edit-book")
+    public String editBookForm(@ModelAttribute("edit_book") @Valid BookDTO bookDTO, BindingResult result, Model model) throws IOException {
+        if(result.hasErrors()){
+            userService.updateModel(model);
+            bookService.updateBookInfoModel(model);
+            return "admin/edit_book";
+        }
+        else if(bookDTO.getImage_file() == null || bookDTO.getImage_file().isEmpty()){
+            userService.updateModel(model);
+            bookService.updateBookInfoModel(model);
+            result.rejectValue("image_file",null,"Please upload the book image.");
+            return "admin/edit_book";
+        }
+        else if(!Objects.requireNonNull(bookDTO.getImage_file().getContentType()).startsWith("image/")){
+            userService.updateModel(model);
+            bookService.updateBookInfoModel(model);
+            result.rejectValue("image_file",null,"Please upload only image files.");
+            return "admin/edit_book";
+        }
+        else if(bookDTO.getContent_file() == null || bookDTO.getContent_file().isEmpty()){
+            userService.updateModel(model);
+            bookService.updateBookInfoModel(model);
+            result.rejectValue("content_file",null,"Please upload the book content.");
+            return "admin/edit_book";
+        }
+        else if(!Objects.requireNonNull(bookDTO.getContent_file().getContentType()).equals("application/pdf")){
+            userService.updateModel(model);
+            bookService.updateBookInfoModel(model);
+            result.rejectValue("content_file",null,"Please upload only pdf files.");
+            return "admin/edit_book";
+        }
+        else {
+            // Path to store book images
+            Path image_path = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\img\\book\\" + bookService.transferBookFile(bookDTO.getImage_file(), bookDTO));
+            // Path to store book contents
+            Path content_path = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\file\\book\\" + bookService.transferBookFile(bookDTO.getContent_file(), bookDTO));
+            // Convert date from string
+            String published_date = bookDTO.getPublished_day();
+            LocalDate date = LocalDate.parse(published_date.trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+            // Map book entity and save to database
+            Optional<Book> existing_book = bookRepository.findById(bookDTO.getId());
+            if(existing_book.isPresent()){
+                bookService.deleteBookFilePath(existing_book.get().getTitle());
+                Book book = mapper.BookDtoToBook(bookDTO);
+                book.setImage(bookDTO.getImage_file().getBytes());
+                book.setContent(bookDTO.getContent_file().getBytes());
+                book.setCategory(categoryRepository.findCategoryByName(bookDTO.getCategory_name()).get());
+                book.setRecommended_age(Integer.parseInt(bookDTO.getRecommended_age()));
+                book.setPublished_date(date);
+                bookRepository.save(book);
+                // Save data paths to the files
+                Files.write(image_path, bookDTO.getImage_file().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                Files.write(content_path, bookDTO.getContent_file().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            }
+            return "redirect:/admin/book-index";
+        }
     }
 
-    private List<String> getAgeToString(List<Integer> ages){
-        return ages.stream().map(Objects::toString).collect(Collectors.toList());
+    @GetMapping("/delete-book/{id}")
+    public String deleteBook(@PathVariable("id") Integer book_id){
+        Optional<Book> book = Optional.of(bookRepository.findById(book_id).orElseThrow());
+        bookService.deleteBookFilePath(book.get().getTitle());
+        bookRepository.delete(book.get());
+        return "redirect:/admin/book-index";
     }
 
-    private List<Integer> getAge(){
-        List<Integer> ages = new ArrayList<>();
-        ages.add(6);
-        ages.add(12);
-        ages.add(16);
-        return ages;
-    }
 
-    private List<String> getStatus(){
-        List<String> status = new ArrayList<>();
-        status.add("Enabled");
-        status.add("Disabled");
-        return status;
-    }
-
-    private List<String> getRole(){
-        List<String> roles = new ArrayList<>();
-        roles.add("admin");
-        roles.add("user");
-        return roles;
-    }
-
-    private void updateBookInfoModel(Model model){
-        List<String> ages = getAgeToString(getAge());
-        model.addAttribute("categories", getCategories());
-        model.addAttribute("ages", ages);
-    }
-
-    private void updateModel(Model model){
-        addUserAttributesToModel(model);
-        model.addAttribute("status",getStatus());
-        model.addAttribute("roles", getRole());
-    }
-
-    public void addUserAttributesToModel(Model model){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findUserByEmail(auth.getName()).get();
-        String role = user.getRole().getName();
-        model.addAttribute("user_detail", user);
-        model.addAttribute("role", role);
-    }
 }
