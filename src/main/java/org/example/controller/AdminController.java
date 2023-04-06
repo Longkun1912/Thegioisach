@@ -3,6 +3,7 @@ package org.example.controller;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tika.Tika;
+import org.apache.tika.metadata.HttpHeaders;
 import org.example.domain.*;
 import org.example.entity.Book;
 import org.example.entity.Category;
@@ -16,7 +17,11 @@ import org.example.repository.UserRepository;
 import org.example.service.BookService;
 import org.example.service.CategoryService;
 import org.example.service.UserService;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,8 +32,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import org.springframework.core.io.Resource;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,8 +49,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller
 @RequestMapping("/admin")
@@ -370,6 +380,28 @@ public class AdminController {
         return "admin/book_index";
     }
 
+    @GetMapping("/book-details/{id}")
+    public String bookDetails(@PathVariable("id") Integer book_id, Model model, HttpServletRequest request) throws FileNotFoundException {
+        userService.updateModel(model);
+        BookDetailsDTO book_details = bookService.getBookDetails(book_id);
+        // Convert book attributes in front-end
+        String book_category = book_details.getCategory().getName();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String published_date = book_details.getPublished_date().format(formatter);
+        String recommended_age = Integer.toString(book_details.getRecommended_age());
+        String page = Integer.toString(book_details.getPage());
+        // Url for reading book content online
+        File bookFile = bookService.findBookFile(book_details.getTitle());
+        String contentUrl = request.getContextPath() + "/file/book/" + bookFile.getName();
+        model.addAttribute("contentUrl", contentUrl);
+        model.addAttribute("book",book_details);
+        model.addAttribute("book_category",book_category);
+        model.addAttribute("published_date",published_date);
+        model.addAttribute("recommended_age",recommended_age);
+        model.addAttribute("page",page);
+        return "admin/book_details";
+    }
+
     @GetMapping(value = "/add-book")
     public String addBook(Model model){
         userService.updateModel(model);
@@ -383,6 +415,12 @@ public class AdminController {
         if(result.hasErrors()){
             userService.updateModel(model);
             bookService.updateBookInfoModel(model);
+            return "admin/add_book";
+        }
+        else if (bookRepository.findBookByTitle(bookDTO.getTitle()).isPresent()){
+            userService.updateModel(model);
+            bookService.updateBookInfoModel(model);
+            result.rejectValue("title",null,"Book title already exist.");
             return "admin/add_book";
         }
         else if(bookDTO.getImage_file() == null || bookDTO.getImage_file().isEmpty()){
@@ -449,6 +487,12 @@ public class AdminController {
             bookService.updateBookInfoModel(model);
             return "admin/edit_book";
         }
+        else if (bookRepository.findBookByTitle(bookDTO.getTitle()).isPresent()){
+            userService.updateModel(model);
+            bookService.updateBookInfoModel(model);
+            result.rejectValue("title",null,"Book title already exist.");
+            return "admin/edit_book";
+        }
         else if(bookDTO.getImage_file() == null || bookDTO.getImage_file().isEmpty()){
             userService.updateModel(model);
             bookService.updateBookInfoModel(model);
@@ -507,6 +551,4 @@ public class AdminController {
         bookRepository.delete(book.get());
         return "redirect:/admin/book-index";
     }
-
-
 }

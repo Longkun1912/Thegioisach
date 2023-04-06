@@ -9,11 +9,15 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Integer> {
     @Query("SELECT b from Book b WHERE (b.category =:category)")
     List<Book> findBookByCategory(@Param("category")Category category);
+
+    @Query("SELECT b from Book b WHERE b.title =:title")
+    Optional<Book> findBookByTitle(@Param("title") String title);
 
     @Query("SELECT b from Book b WHERE (b.title LIKE CONCAT('%', COALESCE(:title, ''), '%')" +
             "OR :title IS NULL)")

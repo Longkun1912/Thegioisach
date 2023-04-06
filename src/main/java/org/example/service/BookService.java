@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -55,6 +57,26 @@ public class BookService {
             mappedBooks.add(bookDetailsDTO);
         }
         return mappedBooks;
+    }
+
+    public BookDetailsDTO getBookDetails(Integer book_id){
+        Optional<Book> book = Optional.of(bookRepository.findById(book_id).orElseThrow());
+        BookDetailsDTO bookDetailsDTO = mapper.bookDetailsDto(book.get());
+        bookDetailsDTO.setBookImageData(mapBookImage(book.get().getImage(), book.get()));
+        return bookDetailsDTO;
+    }
+
+    // Find selected book file in its directory
+    public File findBookFile(String title) throws FileNotFoundException{
+        File directory = new File("D:\\thegioisach\\src\\main\\resources\\static\\file\\book\\");
+        File[] files = directory.listFiles();
+        for (File file : Objects.requireNonNull(files)){
+            if(file.getName().equalsIgnoreCase(title + ".pdf")){
+                System.out.println("Find founded: " + file.getName());
+                return file;
+            }
+        }
+        throw new FileNotFoundException("File not found");
     }
 
     public BookImageData mapBookImage(byte[] image, Book book){
