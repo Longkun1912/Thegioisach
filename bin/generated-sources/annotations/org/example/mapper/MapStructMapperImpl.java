@@ -15,9 +15,7 @@ import org.example.domain.UserRegisterDTO;
 import org.example.entity.Book;
 import org.example.entity.Category;
 import org.example.entity.Comment;
-import org.example.entity.Dislike;
 import org.example.entity.Favorite;
-import org.example.entity.Like;
 import org.example.entity.User;
 import org.springframework.stereotype.Component;
 

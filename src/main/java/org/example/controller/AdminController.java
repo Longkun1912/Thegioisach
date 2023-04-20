@@ -4,18 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tika.Tika;
 import org.example.domain.*;
-import org.example.entity.Book;
-import org.example.entity.Category;
-import org.example.entity.Role;
-import org.example.entity.User;
+import org.example.entity.*;
 import org.example.mapper.MapStructMapper;
-import org.example.repository.BookRepository;
-import org.example.repository.CategoryRepository;
-import org.example.repository.RoleRepository;
-import org.example.repository.UserRepository;
-import org.example.service.BookService;
-import org.example.service.CategoryService;
-import org.example.service.UserService;
+import org.example.repository.*;
+import org.example.service.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -53,6 +45,8 @@ public class AdminController {
     private final UserService userService;
     private final BookService bookService;
     private final CategoryService categoryService;
+    private final PostService postService;
+    private final RateService rateService;
     private final MapStructMapper mapper;
     private final PasswordEncoder passwordEncoder;
 
@@ -542,5 +536,23 @@ public class AdminController {
         bookService.deleteBookFilePath(book.get().getTitle());
         bookRepository.delete(book.get());
         return "redirect:/admin/book-index";
+    }
+
+    @GetMapping("/community")
+    public String communityPage(Model model){
+        userService.addUserAttributesToModel(model);
+        List<PostDTO> posts = postService.getPosts();
+        for(PostDTO post : posts){
+            post.setPost_id(post.getId().toString());
+            rateService.calculateAverageRateInPost(post);
+        }
+        model.addAttribute("posts",posts);
+        return "admin/community";
+    }
+
+    @PostMapping("/provide-rating/{id}")
+    public String provideRating(@PathVariable("id") UUID post_id, @RequestParam("star") int star){
+        rateService.updateRatingForPost(post_id,star);
+        return "redirect:/admin/community";
     }
 }

@@ -9,21 +9,21 @@ import javax.annotation.processing.Generated;
 import org.example.domain.BookDTO;
 import org.example.domain.BookDetailsDTO;
 import org.example.domain.CategoryDTO;
+import org.example.domain.PostDTO;
 import org.example.domain.UserDTO;
 import org.example.domain.UserDetailsDTO;
 import org.example.domain.UserRegisterDTO;
 import org.example.entity.Book;
 import org.example.entity.Category;
 import org.example.entity.Comment;
-import org.example.entity.Dislike;
 import org.example.entity.Favorite;
-import org.example.entity.Like;
+import org.example.entity.Post;
 import org.example.entity.User;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-04-12T00:12:39+0700",
+    date = "2023-04-20T17:59:31+0700",
     comments = "version: 1.5.2.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.4.jar, environment: Java 17.0.5 (Amazon.com Inc.)"
 )
 @Component
@@ -203,21 +203,13 @@ public class MapStructMapperImpl implements MapStructMapper {
         }
         bookDetailsDTO.setRecommended_age( book.getRecommended_age() );
         bookDetailsDTO.setCategory( book.getCategory() );
-        List<Like> list = book.getLikes();
+        List<Favorite> list = book.getFavorites();
         if ( list != null ) {
-            bookDetailsDTO.setLikes( new ArrayList<Like>( list ) );
+            bookDetailsDTO.setFavorites( new ArrayList<Favorite>( list ) );
         }
-        List<Dislike> list1 = book.getDislikes();
+        List<Comment> list1 = book.getComments();
         if ( list1 != null ) {
-            bookDetailsDTO.setDislikes( new ArrayList<Dislike>( list1 ) );
-        }
-        List<Favorite> list2 = book.getFavorites();
-        if ( list2 != null ) {
-            bookDetailsDTO.setFavorites( new ArrayList<Favorite>( list2 ) );
-        }
-        List<Comment> list3 = book.getComments();
-        if ( list3 != null ) {
-            bookDetailsDTO.setComments( new ArrayList<Comment>( list3 ) );
+            bookDetailsDTO.setComments( new ArrayList<Comment>( list1 ) );
         }
 
         return bookDetailsDTO;
@@ -247,17 +239,9 @@ public class MapStructMapperImpl implements MapStructMapper {
         if ( list != null ) {
             book.setComments( new ArrayList<Comment>( list ) );
         }
-        List<Like> list1 = bookDetailsDTO.getLikes();
+        List<Favorite> list1 = bookDetailsDTO.getFavorites();
         if ( list1 != null ) {
-            book.setLikes( new ArrayList<Like>( list1 ) );
-        }
-        List<Dislike> list2 = bookDetailsDTO.getDislikes();
-        if ( list2 != null ) {
-            book.setDislikes( new ArrayList<Dislike>( list2 ) );
-        }
-        List<Favorite> list3 = bookDetailsDTO.getFavorites();
-        if ( list3 != null ) {
-            book.setFavorites( new ArrayList<Favorite>( list3 ) );
+            book.setFavorites( new ArrayList<Favorite>( list1 ) );
         }
 
         return book;
@@ -299,5 +283,51 @@ public class MapStructMapperImpl implements MapStructMapper {
         }
 
         return book;
+    }
+
+    @Override
+    public PostDTO postDto(Post post) {
+        if ( post == null ) {
+            return null;
+        }
+
+        PostDTO postDTO = new PostDTO();
+
+        postDTO.setId( post.getId() );
+        postDTO.setTitle( post.getTitle() );
+        postDTO.setContent_text( post.getContent_text() );
+        List<Comment> list = post.getComments();
+        if ( list != null ) {
+            postDTO.setComments( new ArrayList<Comment>( list ) );
+        }
+        List<User> list1 = post.getSharedBy();
+        if ( list1 != null ) {
+            postDTO.setSharedBy( new ArrayList<User>( list1 ) );
+        }
+
+        return postDTO;
+    }
+
+    @Override
+    public Post postDtoToPost(PostDTO postDTO) {
+        if ( postDTO == null ) {
+            return null;
+        }
+
+        Post post = new Post();
+
+        post.setId( postDTO.getId() );
+        post.setTitle( postDTO.getTitle() );
+        post.setContent_text( postDTO.getContent_text() );
+        List<Comment> list = postDTO.getComments();
+        if ( list != null ) {
+            post.setComments( new ArrayList<Comment>( list ) );
+        }
+        List<User> list1 = postDTO.getSharedBy();
+        if ( list1 != null ) {
+            post.setSharedBy( new ArrayList<User>( list1 ) );
+        }
+
+        return post;
     }
 }

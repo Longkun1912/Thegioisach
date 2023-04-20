@@ -40,12 +40,6 @@ public class BookDetailsDTO {
     private Category category;
 
     @JsonProperty
-    private List<Like> likes;
-
-    @JsonProperty
-    private List<Dislike> dislikes;
-
-    @JsonProperty
     private List<Favorite> favorites;
 
     @JsonProperty

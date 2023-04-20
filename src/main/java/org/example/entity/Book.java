@@ -49,12 +49,6 @@ public class Book {
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    private List<Like> likes;
-
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    private List<Dislike> dislikes;
-
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "book_favorite_details",

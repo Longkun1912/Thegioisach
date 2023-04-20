@@ -1,6 +1,7 @@
 package org.example.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.tika.Tika;
 import org.example.entity.Role;
 import org.example.entity.User;
 import org.example.repository.RoleRepository;
@@ -25,7 +26,6 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
 
     public Set<SimpleGrantedAuthority> getRole(Optional<User> user) {
         Role role = user.get().getRole();
@@ -59,6 +59,12 @@ public class UserService implements UserDetailsService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findUserByEmail(auth.getName()).get();
         String role = user.getRole().getName();
+        byte[] userImage = user.getImage();
+        Tika tika = new Tika();
+        String mimeType = tika.detect(userImage);
+        String base64EncodedImage = Base64.getEncoder().encodeToString(userImage);
+        model.addAttribute("mimeType", mimeType);
+        model.addAttribute("base64EncodedImage", base64EncodedImage);
         model.addAttribute("user_detail", user);
         model.addAttribute("role", role);
     }

@@ -32,16 +32,14 @@ public class Post {
     private LocalDateTime created_time;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Rate> rates;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Like> likes;
-
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Dislike> dislikes;
-
     // A post created by only one user
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_post", referencedColumnName = "id")
     private User creator;
 
     // A post can be shared to many users

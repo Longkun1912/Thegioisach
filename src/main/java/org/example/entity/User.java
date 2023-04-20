@@ -46,14 +46,11 @@ public class User {
     @JoinColumn(name = "user_role", nullable = false)
     private Role role;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Rate> rates;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Like> likes;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Dislike> dislikes;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Favorite> favorites;

@@ -1,34 +1,18 @@
 ---
----Insert to likes entity for posts
+---Insert to rates entity for posts
 ---
-insert into likes (user_like,post_like) values
-('a00e70ea-c6c2-11ed-afa1-0242ac120002','128bfa9a-cbf8-11ed-afa1-0242ac120002'),
-('6e7cc348-cbf8-11ed-afa1-0242ac120002','128bfa9a-cbf8-11ed-afa1-0242ac120002');
+insert into rates (rate_value,created_time,user_rate,post_rate) values
+(5,timestamp '2022-01-06 08:11:08','a00e70ea-c6c2-11ed-afa1-0242ac120002','128bfa9a-cbf8-11ed-afa1-0242ac120002'),
+(4,timestamp '2022-06-08 01:13:05','6e7cc348-cbf8-11ed-afa1-0242ac120002','128bfa9a-cbf8-11ed-afa1-0242ac120002'),
+(5,timestamp '2022-07-01 07:12:02','a00e6d84-c6c2-11ed-afa1-0242ac120002','128bfa9a-cbf8-11ed-afa1-0242ac120002'),
 
----
----Insert to likes entity for books
----
-insert into likes (user_like,book_like) values
-('a00e70ea-c6c2-11ed-afa1-0242ac120002',1),
-('a00e70ea-c6c2-11ed-afa1-0242ac120002',2),
-('6e7cc348-cbf8-11ed-afa1-0242ac120002',1),
-('6e7cc348-cbf8-11ed-afa1-0242ac120002',3);
+(1,timestamp '2022-09-02 03:16:04','a00e70ea-c6c2-11ed-afa1-0242ac120002','ac964e56-dc4c-11ed-afa1-0242ac120002'),
+(3,timestamp '2022-11-11 02:10:11','6e7cc348-cbf8-11ed-afa1-0242ac120002','ac964e56-dc4c-11ed-afa1-0242ac120002'),
+(4,timestamp '2022-07-01 07:12:02','a00e6d84-c6c2-11ed-afa1-0242ac120002','ac964e56-dc4c-11ed-afa1-0242ac120002'),
 
----
----Insert to dislikes entity for posts
----
-insert into dislikes (user_dislike,post_dislike) values
-('a00e70ea-c6c2-11ed-afa1-0242ac120002','128bfa9a-cbf8-11ed-afa1-0242ac120002');
-
----
----Insert to dislikes entity for books
----
-insert into dislikes (user_dislike,book_dislike) values
-('a00e70ea-c6c2-11ed-afa1-0242ac120002',1),
-('a00e70ea-c6c2-11ed-afa1-0242ac120002',2),
-('a00e70ea-c6c2-11ed-afa1-0242ac120002',4),
-('6e7cc348-cbf8-11ed-afa1-0242ac120002',2),
-('6e7cc348-cbf8-11ed-afa1-0242ac120002',3);
+(2,timestamp '2022-07-01 07:12:02','a00e6d84-c6c2-11ed-afa1-0242ac120002','77e36764-dc49-11ed-afa1-0242ac120002'),
+(4,timestamp '2022-11-11 05:07:04','6e7cc348-cbf8-11ed-afa1-0242ac120002','77e36764-dc49-11ed-afa1-0242ac120002'),
+(2,timestamp '2022-07-09 09:19:01','a00e70ea-c6c2-11ed-afa1-0242ac120002','77e36764-dc49-11ed-afa1-0242ac120002');
 
 ---
 ---Insert to comments entity for posts
