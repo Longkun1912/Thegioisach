@@ -23,12 +23,13 @@ public class RateService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
 
-    public void calculateAverageRateInPost(PostDTO postDTO){
+    public float calculateAverageRateInPost(PostDTO postDTO){
         float average_rate = rateRepository.getAverageRateForPost(postDTO.getId());
         // Rounded average star rate to the nearest 0.5
         float rounded_rate = Math.round(average_rate * 2) / 2.0f;
         System.out.println("Average rate of post '" + postDTO.getTitle() + "' is: " + rounded_rate);
         postDTO.setAverage_rate(rounded_rate);
+        return rounded_rate;
     }
 
     public void updateRatingForPost(UUID post_id, int rate_value){
@@ -47,6 +48,26 @@ public class RateService {
             rate.setCreated_time(LocalDateTime.now());
             rateRepository.save(rate);
         }
+    }
+
+    public String[] calculateStarRatings(float average_star) {
+        String[] starRatings = new String[5];
+        int fullStars = (int) average_star;
+        boolean hasHalfStar = (average_star - fullStars) >= 0.5f;
+        for (int i = 0; i < fullStars; i++) {
+            starRatings[i] = "checked";
+        }
+        if (hasHalfStar) {
+            starRatings[fullStars] = "half";
+        }
+        for (int i = fullStars + (hasHalfStar ? 1 : 0); i < 5; i++) {
+            starRatings[i] = "unchecked";
+        }
+        return starRatings;
+    }
+
+    public String countRateByPost(UUID post_id){
+        return rateRepository.countRateByPost(post_id).toString();
     }
 
 }

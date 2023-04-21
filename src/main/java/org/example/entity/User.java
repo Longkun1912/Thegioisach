@@ -55,9 +55,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Favorite> favorites;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Reply> replies;
-
     // One user can have many chats with different users
     // One user can have only one chat to one specific user
     @OneToMany(mappedBy = "user1", cascade = CascadeType.ALL)

@@ -24,6 +24,15 @@ public class Comment {
     @Column
     private LocalDateTime created_time;
 
+    // A comment can have one or many replies of itself
+    // So the comment that contain its replies is called a parent comment
+    @OneToMany(mappedBy = "parent")
+    private List<Comment> replies;
+
+    // If a comment is a top-level comment, the parent_id will be null
+    @ManyToOne
+    private Comment parent;
+
     @ManyToOne
     @JoinColumn(name = "user_comment", nullable = false)
     private User user;
@@ -32,10 +41,9 @@ public class Comment {
     @JoinColumn(name = "post_comment", nullable = false)
     private Post post;
 
-    @ManyToOne
-    @JoinColumn(name = "book_comment", nullable = false)
-    private Book book;
+    public Comment(User user, Post post){
+        this.user = user;
+        this.post = post;
+    }
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
-    private List<Reply> replies;
 }

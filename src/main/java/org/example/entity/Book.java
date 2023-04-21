@@ -46,9 +46,6 @@ public class Book {
     @JoinColumn(name = "book_category", nullable = false)
     private Category category;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    private List<Comment> comments;
-
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "book_favorite_details",

@@ -17,4 +17,7 @@ public interface RateRepository extends JpaRepository<Rate, Integer> {
 
     @Query("SELECT r from Rate r WHERE r.post.id =:postId AND r.user =:user")
     Optional<Rate> findRateByUserAndPost(@Param("postId") UUID postId, @Param("user") User user);
+
+    @Query("SELECT COUNT(r) FROM Rate r WHERE r.post.id =:postId ")
+    Integer countRateByPost(@Param("postId") UUID postId);
 }

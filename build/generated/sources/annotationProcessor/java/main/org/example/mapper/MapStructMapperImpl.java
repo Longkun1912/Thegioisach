@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-04-20T17:59:31+0700",
+    date = "2023-04-21T13:27:00+0700",
     comments = "version: 1.5.2.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.4.jar, environment: Java 17.0.5 (Amazon.com Inc.)"
 )
 @Component
@@ -207,10 +207,6 @@ public class MapStructMapperImpl implements MapStructMapper {
         if ( list != null ) {
             bookDetailsDTO.setFavorites( new ArrayList<Favorite>( list ) );
         }
-        List<Comment> list1 = book.getComments();
-        if ( list1 != null ) {
-            bookDetailsDTO.setComments( new ArrayList<Comment>( list1 ) );
-        }
 
         return bookDetailsDTO;
     }
@@ -235,13 +231,9 @@ public class MapStructMapperImpl implements MapStructMapper {
         }
         book.setRecommended_age( bookDetailsDTO.getRecommended_age() );
         book.setCategory( bookDetailsDTO.getCategory() );
-        List<Comment> list = bookDetailsDTO.getComments();
+        List<Favorite> list = bookDetailsDTO.getFavorites();
         if ( list != null ) {
-            book.setComments( new ArrayList<Comment>( list ) );
-        }
-        List<Favorite> list1 = bookDetailsDTO.getFavorites();
-        if ( list1 != null ) {
-            book.setFavorites( new ArrayList<Favorite>( list1 ) );
+            book.setFavorites( new ArrayList<Favorite>( list ) );
         }
 
         return book;
