@@ -4,7 +4,7 @@
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="29">
+          <list size="30">
             <item index="0" class="java.lang.String" itemvalue="th:href" />
             <item index="1" class="java.lang.String" itemvalue="th:src" />
             <item index="2" class="java.lang.String" itemvalue="th:fragment" />
@@ -34,6 +34,7 @@
             <item index="26" class="java.lang.String" itemvalue="th:for" />
             <item index="27" class="java.lang.String" itemvalue="th:class" />
             <item index="28" class="java.lang.String" itemvalue="th:classappend" />
+            <item index="29" class="java.lang.String" itemvalue="th:data-post-id" />
           </list>
         </value>
       </option>
@@ -59,11 +60,6 @@
     </inspection_tool>
     <inspection_tool class="RequiredAttributes" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myAdditionalRequiredHtmlAttributes" value="src" />
-    </inspection_tool>
-    <inspection_tool class="com.haulmont.jpb.CompositeIdClassSerializable" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="n">
-        <Project />
-      </option>
     </inspection_tool>
   </profile>
 </component>

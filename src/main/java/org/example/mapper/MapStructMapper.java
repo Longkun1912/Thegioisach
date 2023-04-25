@@ -1,10 +1,7 @@
 package org.example.mapper;
 
 import org.example.domain.*;
-import org.example.entity.Book;
-import org.example.entity.Category;
-import org.example.entity.Post;
-import org.example.entity.User;
+import org.example.entity.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -41,8 +38,18 @@ public interface MapStructMapper {
 
     Book BookDtoToBook(BookDTO bookDTO);
 
-    //Post domain for creating, viewing and reacting
+    // Post domain for viewing and reacting
     PostDTO postDto(Post post);
 
     Post postDtoToPost(PostDTO postDTO);
+
+    // Post domain for creating and editing
+    PostHandlingDTO postHandlingDto(Post post);
+
+    Post postHandlingDtoToPost(PostHandlingDTO postHandlingDTO);
+
+    // Comment domain for creating, editing and replying
+    CommentDTO commentDto(Comment comment);
+
+    Comment commentDtoToComment(CommentDTO commentDTO);
 }

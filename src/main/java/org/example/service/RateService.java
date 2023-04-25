@@ -24,7 +24,14 @@ public class RateService {
     private final PostRepository postRepository;
 
     public float calculateAverageRateInPost(PostDTO postDTO){
-        float average_rate = rateRepository.getAverageRateForPost(postDTO.getId());
+        float average_rate;
+        Post post = postRepository.findById(postDTO.getId()).orElseThrow();
+        if(post.getRates() == null || post.getRates().isEmpty()){
+            average_rate = 0;
+        }
+        else {
+            average_rate = rateRepository.getAverageRateForPost(postDTO.getId());
+        }
         // Rounded average star rate to the nearest 0.5
         float rounded_rate = Math.round(average_rate * 2) / 2.0f;
         System.out.println("Average rate of post '" + postDTO.getTitle() + "' is: " + rounded_rate);

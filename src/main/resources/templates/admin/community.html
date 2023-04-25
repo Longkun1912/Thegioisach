@@ -65,8 +65,17 @@
                                     <h1 style="font-family: sans-serif; font-size: 25px;" th:text="${post.creator_detail.username}"></h1>
                                     <h2 style="font-family: sans-serif; font-size: 15px; color: darkgrey;" th:text="${post.last_updated}"></h2>
                                 </div>
-                                <div class="post-action">
-
+                                <div class="btn-group dropright" id="post-actions">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        ...
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <button class="dropdown-item edit-post-button" data-toggle="modal" data-target="#editPost">
+                                            Edit post
+                                        </button>
+                                        <a type="button" class="dropdown-item" th:href="@{/admin/delete-post/{id}(id=@{${post.id}})}">Delete post</a>
+                                    </div>
+                                    <div th:replace="admin/edit_post :: edit-post" th:with="post=${post}"></div>
                                 </div>
                             </div>
                             <div class="post-content">

@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,5 +31,10 @@ public class CommentService {
         comment.setText(comment_text);
         comment.setCreated_time(LocalDateTime.now());
         commentRepository.save(comment);
+    }
+
+    public List<Comment> viewCommentsInPost(UUID post_id){
+        List<Comment> comments = commentRepository.getCommentsForPost(post_id);
+        return comments;
     }
 }

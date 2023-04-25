@@ -10,6 +10,7 @@ import org.example.domain.BookDTO;
 import org.example.domain.BookDetailsDTO;
 import org.example.domain.CategoryDTO;
 import org.example.domain.PostDTO;
+import org.example.domain.PostHandlingDTO;
 import org.example.domain.UserDTO;
 import org.example.domain.UserDetailsDTO;
 import org.example.domain.UserRegisterDTO;
@@ -23,7 +24,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-04-21T13:27:00+0700",
+    date = "2023-04-25T11:40:37+0700",
     comments = "version: 1.5.2.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.4.jar, environment: Java 17.0.5 (Amazon.com Inc.)"
 )
 @Component
@@ -319,6 +320,36 @@ public class MapStructMapperImpl implements MapStructMapper {
         if ( list1 != null ) {
             post.setSharedBy( new ArrayList<User>( list1 ) );
         }
+
+        return post;
+    }
+
+    @Override
+    public PostHandlingDTO postHandlingDto(Post post) {
+        if ( post == null ) {
+            return null;
+        }
+
+        PostHandlingDTO postHandlingDTO = new PostHandlingDTO();
+
+        postHandlingDTO.setId( post.getId() );
+        postHandlingDTO.setTitle( post.getTitle() );
+        postHandlingDTO.setContent_text( post.getContent_text() );
+
+        return postHandlingDTO;
+    }
+
+    @Override
+    public Post postHandlingDtoToPost(PostHandlingDTO postHandlingDTO) {
+        if ( postHandlingDTO == null ) {
+            return null;
+        }
+
+        Post post = new Post();
+
+        post.setId( postHandlingDTO.getId() );
+        post.setTitle( postHandlingDTO.getTitle() );
+        post.setContent_text( postHandlingDTO.getContent_text() );
 
         return post;
     }

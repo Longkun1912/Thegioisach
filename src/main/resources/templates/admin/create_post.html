@@ -11,19 +11,34 @@
     <div class="modal fade" id="createPost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content" id="post-creator">
-          <div class="modal-header">
-            <h5 class="modal-title" style="font-size: 30px; margin-left: 35%;">Create post</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary">Post</button>
-          </div>
+          <form th:action="@{/admin/create-post}" th:object="${post_create}" enctype="multipart/form-data" th:method="post">
+            <div class="modal-header">
+              <h5 class="modal-title" style="font-size: 30px; margin-left: 35%;">Create post</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label class="form-check-label">Enter post title:</label>
+                <input type="text" th:field="*{title}" class="form-control" style="margin-top: 2%;">
+              </div>
+              <div class="form-group">
+                <label for="post_content" class="form-check-label">Enter post content:</label>
+                <textarea class="form-control" th:field="*{content_text}" id="post_content" name="comment" rows="5" style="margin-top: 2%;"></textarea>
+              </div>
+              <div>
+                <label for="image_file" class="form-check-label">Upload post image: </label>
+                <div class="form-group" style="margin-top: 3%;">
+                  <input id="image_file" type="file" name="file" class="form-control-file" accept="image/*">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+              <button id="post-button" type="submit" class="btn btn-primary">Post</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

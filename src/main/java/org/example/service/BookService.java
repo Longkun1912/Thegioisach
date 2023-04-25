@@ -16,14 +16,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +28,7 @@ public class BookService {
     private final BookRepository bookRepository;
     private final CategoryService categoryService;
     private final MapStructMapper mapper;
+    private final FileService fileService;
 
     public List<BookDetailsDTO> getFilteredBooks(Category category, LocalDate startDate, LocalDate endDate, Integer recommended_age){
         List<Book> filtered_books = bookRepository.filterBook(category,startDate,endDate,recommended_age);
@@ -113,23 +111,7 @@ public class BookService {
     public void deleteBookFilePath(String title) {
         Path imagePath = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\img\\book\\");
         Path filePath = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\file\\book\\");
-        deleteFileIfExists(imagePath,title);
-        deleteFileIfExists(filePath,title);
-    }
-
-    private void deleteFileIfExists(Path selected_path, String title) {
-        try (Stream<Path> walk = Files.walk(selected_path)) {
-            Optional<Path> selected_file = walk
-                    .filter(Files::isRegularFile)
-                    .filter(path -> path.getFileName().toString().contains(title))
-                    .findFirst();
-            if (selected_file.isPresent()) {
-                Files.delete(selected_file.get());
-            } else {
-                System.out.println("File not found");
-            }
-        } catch (IOException e) {
-            System.out.println("Error.");
-        }
+        fileService.deleteFileIfExists(imagePath,title);
+        fileService.deleteFileIfExists(filePath,title);
     }
 }

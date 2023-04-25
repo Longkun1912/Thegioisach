@@ -2,6 +2,10 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.domain.PostDTO;
+import org.example.domain.PostHandlingDTO;
+import org.example.entity.Post;
+import org.example.mapper.MapStructMapper;
+import org.example.repository.PostRepository;
 import org.example.service.CommentService;
 import org.example.service.PostService;
 import org.example.service.RateService;
@@ -35,6 +39,7 @@ public class CommunityController {
             model.addAttribute("people_rates_" + post.getPost_id(), people_rates);
             model.addAttribute("star_rating_" + post.getPost_id(), starRatings);
         }
+        model.addAttribute("post_create", new PostHandlingDTO());
         model.addAttribute("posts",posts);
         return "admin/community";
     }

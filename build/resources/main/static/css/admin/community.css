@@ -60,9 +60,32 @@
     margin-left: 20px;
     margin-top: 5px;
 }
-.post-action{
 
+#post-actions .btn-secondary {
+  border: none;
+  background-color: transparent;
+  color: #333;
+  font-size: 40px;
+  margin-left: 580%;
+  margin-top: -150%;
 }
+
+#post-actions .btn-secondary:focus {
+  box-shadow: none;
+}
+
+#post-actions .dropdown-toggle::after {
+  display: none;
+}
+
+#post-actions .dropdown-item + .dropdown-item:before {
+  content: "";
+  display: block;
+  height: 1px;
+  margin: 8px 0;
+  border-top: 1px solid #ccc;
+}
+
 .post-image{
     margin-left: 30%;
     margin-bottom: 20px;
