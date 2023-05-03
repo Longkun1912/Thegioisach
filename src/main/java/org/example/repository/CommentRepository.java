@@ -11,9 +11,13 @@ import java.util.UUID;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
-    @Query("SELECT c from Comment c WHERE c.parent =:parent_id ORDER BY c.created_time ASC")
-    List<Comment> getRepliesByComment(@Param("parent_id") Integer parent_id);
 
-    @Query("SELECT c from Comment c WHERE c.post.id =:post_id ORDER BY c.created_time ASC")
+    @Query("SELECT c from Comment c " +
+            "WHERE (c.post.id =:post_id) " +
+            "AND (c.parent IS NULL) " +
+            "ORDER BY c.created_time ASC")
     List<Comment> getCommentsForPost(@Param("post_id") UUID post_id);
+
+    @Query("SELECT c from Comment c WHERE c.parent =:parent")
+    List<Comment> getRepliesByComment(@Param("parent") Comment comment);
 }

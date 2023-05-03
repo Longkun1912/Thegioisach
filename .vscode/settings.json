@@ -1,3 +1,5 @@
 {
-  "java.compile.nullAnalysis.mode": "automatic"
+  "java.compile.nullAnalysis.mode": "automatic",
+  "appService.defaultWebAppToDeploy": "/subscriptions/a31feccb-f251-4df8-80d5-36f3791ab248/resourceGroups/book-world/providers/Microsoft.Web/sites/the-gioi-sach",
+  "appService.deploySubpath": "."
 }

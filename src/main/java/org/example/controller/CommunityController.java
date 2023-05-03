@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.domain.CommentDTO;
 import org.example.domain.PostDTO;
 import org.example.domain.PostHandlingDTO;
 import org.example.entity.Post;
@@ -31,10 +32,15 @@ public class CommunityController {
         List<PostDTO> posts = postService.getPosts();
         for(PostDTO post : posts){
             post.setPost_id(post.getId().toString());
+            // Calculate star rating of a post
             float average_star = rateService.calculateAverageRateInPost(post);
             String star_text = String.format("%.1f", average_star).replace('.', ',');
             String[] starRatings = rateService.calculateStarRatings(average_star);
             String people_rates = rateService.countRateByPost(post.getId());
+            // Get comments and their replies of a post
+            List<CommentDTO> comments = commentService.viewCommentsInPost(post.getId());
+            post.setComments(comments);
+            // Add to model
             model.addAttribute("average_star_" + post.getPost_id(), star_text);
             model.addAttribute("people_rates_" + post.getPost_id(), people_rates);
             model.addAttribute("star_rating_" + post.getPost_id(), starRatings);

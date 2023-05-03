@@ -62,6 +62,7 @@ public class AdminController {
         List<User> users = userRepository.findUserByRole(role);
         List<UserDetailsDTO> userDetailsDTOS = new ArrayList<>();
         for (User user : users){
+            // Configure user image
             byte[] userImage = user.getImage();
             Tika tika = new Tika();
             String mimeType = tika.detect(userImage);
@@ -69,6 +70,7 @@ public class AdminController {
             UserImageData userImageData = new UserImageData(user, mimeType, base64EncodedImage);
             UserDetailsDTO userDetailsDTO = mapper.userDetailsDto(user);
             userDetailsDTO.setUserImageData(userImageData);
+            // Configure account update
             LocalDateTime last_updated = user.getLast_updated();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy 'at' hh:mm a");
             userDetailsDTO.setLast_updated(last_updated.format(formatter));

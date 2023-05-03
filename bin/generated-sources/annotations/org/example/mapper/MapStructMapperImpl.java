@@ -9,6 +9,9 @@ import javax.annotation.processing.Generated;
 import org.example.domain.BookDTO;
 import org.example.domain.BookDetailsDTO;
 import org.example.domain.CategoryDTO;
+import org.example.domain.CommentDTO;
+import org.example.domain.PostDTO;
+import org.example.domain.PostHandlingDTO;
 import org.example.domain.UserDTO;
 import org.example.domain.UserDetailsDTO;
 import org.example.domain.UserRegisterDTO;
@@ -16,12 +19,13 @@ import org.example.entity.Book;
 import org.example.entity.Category;
 import org.example.entity.Comment;
 import org.example.entity.Favorite;
+import org.example.entity.Post;
 import org.example.entity.User;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-04-12T00:48:38+0700",
+    date = "2023-05-03T21:09:55+0700",
     comments = "version: 1.5.2.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 18.0.1.1 (Oracle Corporation)"
 )
 @Component
@@ -191,28 +195,16 @@ public class MapStructMapperImpl implements MapStructMapper {
 
         bookDetailsDTO.setAuthor( book.getAuthor() );
         bookDetailsDTO.setCategory( book.getCategory() );
-        List<Comment> list = book.getComments();
-        if ( list != null ) {
-            bookDetailsDTO.setComments( new ArrayList<Comment>( list ) );
-        }
         byte[] content = book.getContent();
         if ( content != null ) {
             bookDetailsDTO.setContent( Arrays.copyOf( content, content.length ) );
         }
         bookDetailsDTO.setDescription( book.getDescription() );
-        List<Dislike> list1 = book.getDislikes();
-        if ( list1 != null ) {
-            bookDetailsDTO.setDislikes( new ArrayList<Dislike>( list1 ) );
-        }
-        List<Favorite> list2 = book.getFavorites();
-        if ( list2 != null ) {
-            bookDetailsDTO.setFavorites( new ArrayList<Favorite>( list2 ) );
+        List<Favorite> list = book.getFavorites();
+        if ( list != null ) {
+            bookDetailsDTO.setFavorites( new ArrayList<Favorite>( list ) );
         }
         bookDetailsDTO.setId( book.getId() );
-        List<Like> list3 = book.getLikes();
-        if ( list3 != null ) {
-            bookDetailsDTO.setLikes( new ArrayList<Like>( list3 ) );
-        }
         bookDetailsDTO.setPage( book.getPage() );
         bookDetailsDTO.setPublished_date( book.getPublished_date() );
         bookDetailsDTO.setRecommended_age( book.getRecommended_age() );
@@ -231,28 +223,16 @@ public class MapStructMapperImpl implements MapStructMapper {
 
         book.setAuthor( bookDetailsDTO.getAuthor() );
         book.setCategory( bookDetailsDTO.getCategory() );
-        List<Comment> list = bookDetailsDTO.getComments();
-        if ( list != null ) {
-            book.setComments( new ArrayList<Comment>( list ) );
-        }
         byte[] content = bookDetailsDTO.getContent();
         if ( content != null ) {
             book.setContent( Arrays.copyOf( content, content.length ) );
         }
         book.setDescription( bookDetailsDTO.getDescription() );
-        List<Dislike> list1 = bookDetailsDTO.getDislikes();
-        if ( list1 != null ) {
-            book.setDislikes( new ArrayList<Dislike>( list1 ) );
-        }
-        List<Favorite> list2 = bookDetailsDTO.getFavorites();
-        if ( list2 != null ) {
-            book.setFavorites( new ArrayList<Favorite>( list2 ) );
+        List<Favorite> list = bookDetailsDTO.getFavorites();
+        if ( list != null ) {
+            book.setFavorites( new ArrayList<Favorite>( list ) );
         }
         book.setId( bookDetailsDTO.getId() );
-        List<Like> list3 = bookDetailsDTO.getLikes();
-        if ( list3 != null ) {
-            book.setLikes( new ArrayList<Like>( list3 ) );
-        }
         book.setPage( bookDetailsDTO.getPage() );
         book.setPublished_date( bookDetailsDTO.getPublished_date() );
         book.setRecommended_age( bookDetailsDTO.getRecommended_age() );
@@ -297,5 +277,133 @@ public class MapStructMapperImpl implements MapStructMapper {
         book.setTitle( bookDTO.getTitle() );
 
         return book;
+    }
+
+    @Override
+    public PostDTO postDto(Post post) {
+        if ( post == null ) {
+            return null;
+        }
+
+        PostDTO postDTO = new PostDTO();
+
+        postDTO.setComments( commentListToCommentDTOList( post.getComments() ) );
+        postDTO.setContent_text( post.getContent_text() );
+        postDTO.setId( post.getId() );
+        List<User> list1 = post.getSharedBy();
+        if ( list1 != null ) {
+            postDTO.setSharedBy( new ArrayList<User>( list1 ) );
+        }
+        postDTO.setTitle( post.getTitle() );
+
+        return postDTO;
+    }
+
+    @Override
+    public Post postDtoToPost(PostDTO postDTO) {
+        if ( postDTO == null ) {
+            return null;
+        }
+
+        Post post = new Post();
+
+        post.setComments( commentDTOListToCommentList( postDTO.getComments() ) );
+        post.setContent_text( postDTO.getContent_text() );
+        post.setId( postDTO.getId() );
+        List<User> list1 = postDTO.getSharedBy();
+        if ( list1 != null ) {
+            post.setSharedBy( new ArrayList<User>( list1 ) );
+        }
+        post.setTitle( postDTO.getTitle() );
+
+        return post;
+    }
+
+    @Override
+    public PostHandlingDTO postHandlingDto(Post post) {
+        if ( post == null ) {
+            return null;
+        }
+
+        PostHandlingDTO postHandlingDTO = new PostHandlingDTO();
+
+        postHandlingDTO.setContent_text( post.getContent_text() );
+        postHandlingDTO.setId( post.getId() );
+        postHandlingDTO.setTitle( post.getTitle() );
+
+        return postHandlingDTO;
+    }
+
+    @Override
+    public Post postHandlingDtoToPost(PostHandlingDTO postHandlingDTO) {
+        if ( postHandlingDTO == null ) {
+            return null;
+        }
+
+        Post post = new Post();
+
+        post.setContent_text( postHandlingDTO.getContent_text() );
+        post.setId( postHandlingDTO.getId() );
+        post.setTitle( postHandlingDTO.getTitle() );
+
+        return post;
+    }
+
+    @Override
+    public CommentDTO commentDto(Comment comment) {
+        if ( comment == null ) {
+            return null;
+        }
+
+        CommentDTO commentDTO = new CommentDTO();
+
+        commentDTO.setId( comment.getId() );
+        commentDTO.setParent( commentDto( comment.getParent() ) );
+        commentDTO.setReplies( commentListToCommentDTOList( comment.getReplies() ) );
+        commentDTO.setText( comment.getText() );
+
+        return commentDTO;
+    }
+
+    @Override
+    public Comment commentDtoToComment(CommentDTO commentDTO) {
+        if ( commentDTO == null ) {
+            return null;
+        }
+
+        Comment comment = new Comment();
+
+        comment.setId( commentDTO.getId() );
+        comment.setParent( commentDtoToComment( commentDTO.getParent() ) );
+        comment.setReplies( commentDTOListToCommentList( commentDTO.getReplies() ) );
+        comment.setText( commentDTO.getText() );
+
+        return comment;
+    }
+
+    protected List<CommentDTO> commentListToCommentDTOList(List<Comment> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<CommentDTO> list1 = new ArrayList<CommentDTO>( list.size() );
+        for ( Comment comment : list ) {
+            list1.add( commentDto( comment ) );
+        }
+
+        return list1;
+    }
+
+    protected List<Comment> commentDTOListToCommentList(List<CommentDTO> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<Comment> list1 = new ArrayList<Comment>( list.size() );
+        for ( CommentDTO commentDTO : list ) {
+            list1.add( commentDtoToComment( commentDTO ) );
+        }
+
+        return list1;
     }
 }

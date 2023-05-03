@@ -18,17 +18,14 @@ public class CommentDTO {
     private String text;
 
     @JsonProperty
-    private LocalDateTime created_time;
+    private String updated_time;
 
     @JsonProperty
     private List<CommentDTO> replies;
 
     @JsonProperty
-    private Comment parent;
+    private CommentDTO parent;
 
     @JsonProperty
-    private User user;
-
-    @JsonProperty
-    private Post post;
+    private UserDetailsDTO creator;
 }

@@ -32,7 +32,7 @@ public class PostDTO {
     private float average_rate;
 
     @JsonProperty
-    private List<Comment> comments;
+    private List<CommentDTO> comments;
 
     @JsonProperty
     private UserDetailsDTO creator_detail;

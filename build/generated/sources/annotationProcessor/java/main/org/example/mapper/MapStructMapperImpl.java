@@ -9,6 +9,7 @@ import javax.annotation.processing.Generated;
 import org.example.domain.BookDTO;
 import org.example.domain.BookDetailsDTO;
 import org.example.domain.CategoryDTO;
+import org.example.domain.CommentDTO;
 import org.example.domain.PostDTO;
 import org.example.domain.PostHandlingDTO;
 import org.example.domain.UserDTO;
@@ -24,8 +25,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-04-25T11:40:37+0700",
-    comments = "version: 1.5.2.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.4.jar, environment: Java 17.0.5 (Amazon.com Inc.)"
+    date = "2023-05-03T21:40:57+0700",
+    comments = "version: 1.5.2.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.4.jar, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 @Component
 public class MapStructMapperImpl implements MapStructMapper {
@@ -289,10 +290,7 @@ public class MapStructMapperImpl implements MapStructMapper {
         postDTO.setId( post.getId() );
         postDTO.setTitle( post.getTitle() );
         postDTO.setContent_text( post.getContent_text() );
-        List<Comment> list = post.getComments();
-        if ( list != null ) {
-            postDTO.setComments( new ArrayList<Comment>( list ) );
-        }
+        postDTO.setComments( commentListToCommentDTOList( post.getComments() ) );
         List<User> list1 = post.getSharedBy();
         if ( list1 != null ) {
             postDTO.setSharedBy( new ArrayList<User>( list1 ) );
@@ -312,10 +310,7 @@ public class MapStructMapperImpl implements MapStructMapper {
         post.setId( postDTO.getId() );
         post.setTitle( postDTO.getTitle() );
         post.setContent_text( postDTO.getContent_text() );
-        List<Comment> list = postDTO.getComments();
-        if ( list != null ) {
-            post.setComments( new ArrayList<Comment>( list ) );
-        }
+        post.setComments( commentDTOListToCommentList( postDTO.getComments() ) );
         List<User> list1 = postDTO.getSharedBy();
         if ( list1 != null ) {
             post.setSharedBy( new ArrayList<User>( list1 ) );
@@ -352,5 +347,63 @@ public class MapStructMapperImpl implements MapStructMapper {
         post.setContent_text( postHandlingDTO.getContent_text() );
 
         return post;
+    }
+
+    @Override
+    public CommentDTO commentDto(Comment comment) {
+        if ( comment == null ) {
+            return null;
+        }
+
+        CommentDTO commentDTO = new CommentDTO();
+
+        commentDTO.setId( comment.getId() );
+        commentDTO.setText( comment.getText() );
+        commentDTO.setReplies( commentListToCommentDTOList( comment.getReplies() ) );
+        commentDTO.setParent( commentDto( comment.getParent() ) );
+
+        return commentDTO;
+    }
+
+    @Override
+    public Comment commentDtoToComment(CommentDTO commentDTO) {
+        if ( commentDTO == null ) {
+            return null;
+        }
+
+        Comment comment = new Comment();
+
+        comment.setId( commentDTO.getId() );
+        comment.setText( commentDTO.getText() );
+        comment.setReplies( commentDTOListToCommentList( commentDTO.getReplies() ) );
+        comment.setParent( commentDtoToComment( commentDTO.getParent() ) );
+
+        return comment;
+    }
+
+    protected List<CommentDTO> commentListToCommentDTOList(List<Comment> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<CommentDTO> list1 = new ArrayList<CommentDTO>( list.size() );
+        for ( Comment comment : list ) {
+            list1.add( commentDto( comment ) );
+        }
+
+        return list1;
+    }
+
+    protected List<Comment> commentDTOListToCommentList(List<CommentDTO> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<Comment> list1 = new ArrayList<Comment>( list.size() );
+        for ( CommentDTO commentDTO : list ) {
+            list1.add( commentDtoToComment( commentDTO ) );
+        }
+
+        return list1;
     }
 }
