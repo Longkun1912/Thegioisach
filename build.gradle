@@ -4,6 +4,10 @@ plugins {
     id 'java'
 }
 
+bootJar {
+    archiveFileName = 'the-gioi-sach'
+}
+
 group 'org.example'
 version '1.0-SNAPSHOT'
 
@@ -17,11 +21,6 @@ configurations {
     }
 }
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.4'
