@@ -51,7 +51,6 @@ public class BookService {
     public List<BookDetailsDTO> bookResults(List<Book> books, List<BookDetailsDTO> mappedBooks){
         for (Book book : books){
             BookDetailsDTO bookDetailsDTO = mapper.bookDetailsDto(book);
-            bookDetailsDTO.setBookImageData(mapBookImage(book.getImage(),book));
             mappedBooks.add(bookDetailsDTO);
         }
         return mappedBooks;
@@ -60,7 +59,6 @@ public class BookService {
     public BookDetailsDTO getBookDetails(Integer book_id){
         Optional<Book> book = Optional.of(bookRepository.findById(book_id).orElseThrow());
         BookDetailsDTO bookDetailsDTO = mapper.bookDetailsDto(book.get());
-        bookDetailsDTO.setBookImageData(mapBookImage(book.get().getImage(), book.get()));
         return bookDetailsDTO;
     }
 

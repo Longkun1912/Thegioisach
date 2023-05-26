@@ -88,17 +88,6 @@ public class HomeController {
         else {
             User user = mapper.userRegisteredDtoToUser(userRegisterDTO);
             user.setId(UUID.randomUUID());
-            // Get the original filename of the uploaded file
-            String originalFilename = file.getOriginalFilename();
-            // Extract the file extension
-            String extension = FilenameUtils.getExtension(originalFilename);
-            // Construct a new filename based on the user's email (or any other value)
-            String newFilename = userRegisterDTO.getUsername() + "." + extension;
-            // Save the uploaded file to the specified directory
-            Path path = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\img\\user\\" + newFilename);
-            Files.write(path, file.getBytes());
-            // Set the image attribute of the User object to the new filename
-            user.setImage(file.getBytes());
             user.setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
             user.setRole(roleRepository.findRoleByName("user"));
             user.setLast_updated(LocalDateTime.now());

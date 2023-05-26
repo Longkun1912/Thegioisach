@@ -63,13 +63,7 @@ public class AdminController {
         List<UserDetailsDTO> userDetailsDTOS = new ArrayList<>();
         for (User user : users){
             // Configure user image
-            byte[] userImage = user.getImage();
-            Tika tika = new Tika();
-            String mimeType = tika.detect(userImage);
-            String base64EncodedImage = Base64.getEncoder().encodeToString(userImage);
-            UserImageData userImageData = new UserImageData(user, mimeType, base64EncodedImage);
             UserDetailsDTO userDetailsDTO = mapper.userDetailsDto(user);
-            userDetailsDTO.setUserImageData(userImageData);
             // Configure account update
             LocalDateTime last_updated = user.getLast_updated();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy 'at' hh:mm a");
@@ -139,7 +133,6 @@ public class AdminController {
                 path = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\img\\admin\\" + newFilename);
             }
             // Set the image attribute of the User object to the new filename
-            user.setImage(file.getBytes());
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             user.setRole(roleRepository.findRoleByName(userDTO.getInput_role()));
             user.setLast_updated(LocalDateTime.now());
@@ -217,7 +210,6 @@ public class AdminController {
                 updated_user.setRole(roleRepository.findRoleByName(userDTO.getInput_role()));
                 updated_user.setLast_updated(LocalDateTime.now());
                 // Set the image attribute of the User object to the new filename
-                updated_user.setImage(file.getBytes());
                 updated_user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
                 userRepository.save(updated_user);
                 Files.write(path, file.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);

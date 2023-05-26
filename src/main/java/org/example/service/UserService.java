@@ -59,12 +59,6 @@ public class UserService implements UserDetailsService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findUserByEmail(auth.getName()).get();
         String role = user.getRole().getName();
-        byte[] userImage = user.getImage();
-        Tika tika = new Tika();
-        String mimeType = tika.detect(userImage);
-        String base64EncodedImage = Base64.getEncoder().encodeToString(userImage);
-        model.addAttribute("mimeType", mimeType);
-        model.addAttribute("base64EncodedImage", base64EncodedImage);
         model.addAttribute("user_detail", user);
         model.addAttribute("role", role);
     }

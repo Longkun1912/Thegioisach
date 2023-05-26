@@ -28,7 +28,7 @@ public class BookDetailsDTO {
     private String description;
 
     @JsonProperty
-    private byte[] content;
+    private String content;
 
     @JsonProperty
     private BookImageData bookImageData;

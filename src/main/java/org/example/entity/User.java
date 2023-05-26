@@ -24,8 +24,8 @@ public class User {
     @Column
     private String username;
 
-    @Column(nullable = true)
-    private byte[] image;
+    @Column
+    private String image;
 
     @Column
     private String email;

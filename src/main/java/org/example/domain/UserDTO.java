@@ -19,7 +19,7 @@ public class UserDTO {
     private String username;
 
     @JsonProperty
-    private byte[] image;
+    private String image;
 
     @JsonProperty
     @NotEmpty(message = "This field cannot be empty.")

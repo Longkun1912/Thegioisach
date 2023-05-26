@@ -3,7 +3,6 @@ package org.example.mapper;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.annotation.processing.Generated;
 import org.example.domain.BookDTO;
@@ -25,7 +24,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-05-21T20:32:23+0700",
+    date = "2023-05-26T13:11:04+0700",
     comments = "version: 1.5.2.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.4.jar, environment: Java 17.0.5 (Amazon.com Inc.)"
 )
 @Component
@@ -40,10 +39,7 @@ public class MapStructMapperImpl implements MapStructMapper {
         UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
 
         userRegisterDTO.setUsername( user.getUsername() );
-        byte[] image = user.getImage();
-        if ( image != null ) {
-            userRegisterDTO.setImage( Arrays.copyOf( image, image.length ) );
-        }
+        userRegisterDTO.setImage( user.getImage() );
         userRegisterDTO.setEmail( user.getEmail() );
         userRegisterDTO.setPhone_number( user.getPhone_number() );
         userRegisterDTO.setPassword( user.getPassword() );
@@ -60,10 +56,7 @@ public class MapStructMapperImpl implements MapStructMapper {
         User user = new User();
 
         user.setUsername( userRegisteredDto.getUsername() );
-        byte[] image = userRegisteredDto.getImage();
-        if ( image != null ) {
-            user.setImage( Arrays.copyOf( image, image.length ) );
-        }
+        user.setImage( userRegisteredDto.getImage() );
         user.setEmail( userRegisteredDto.getEmail() );
         user.setPhone_number( userRegisteredDto.getPhone_number() );
         user.setPassword( userRegisteredDto.getPassword() );
@@ -81,10 +74,7 @@ public class MapStructMapperImpl implements MapStructMapper {
 
         userDTO.setId( user.getId() );
         userDTO.setUsername( user.getUsername() );
-        byte[] image = user.getImage();
-        if ( image != null ) {
-            userDTO.setImage( Arrays.copyOf( image, image.length ) );
-        }
+        userDTO.setImage( user.getImage() );
         userDTO.setEmail( user.getEmail() );
         userDTO.setPhone_number( user.getPhone_number() );
         userDTO.setStatus( user.getStatus() );
@@ -103,10 +93,7 @@ public class MapStructMapperImpl implements MapStructMapper {
 
         user.setId( userDTO.getId() );
         user.setUsername( userDTO.getUsername() );
-        byte[] image = userDTO.getImage();
-        if ( image != null ) {
-            user.setImage( Arrays.copyOf( image, image.length ) );
-        }
+        user.setImage( userDTO.getImage() );
         user.setEmail( userDTO.getEmail() );
         user.setPhone_number( userDTO.getPhone_number() );
         user.setStatus( userDTO.getStatus() );
@@ -199,10 +186,7 @@ public class MapStructMapperImpl implements MapStructMapper {
         bookDetailsDTO.setPublished_date( book.getPublished_date() );
         bookDetailsDTO.setPage( book.getPage() );
         bookDetailsDTO.setDescription( book.getDescription() );
-        byte[] content = book.getContent();
-        if ( content != null ) {
-            bookDetailsDTO.setContent( Arrays.copyOf( content, content.length ) );
-        }
+        bookDetailsDTO.setContent( book.getContent() );
         bookDetailsDTO.setRecommended_age( book.getRecommended_age() );
         bookDetailsDTO.setCategory( book.getCategory() );
         List<Favorite> list = book.getFavorites();
@@ -227,10 +211,7 @@ public class MapStructMapperImpl implements MapStructMapper {
         book.setPublished_date( bookDetailsDTO.getPublished_date() );
         book.setPage( bookDetailsDTO.getPage() );
         book.setDescription( bookDetailsDTO.getDescription() );
-        byte[] content = bookDetailsDTO.getContent();
-        if ( content != null ) {
-            book.setContent( Arrays.copyOf( content, content.length ) );
-        }
+        book.setContent( bookDetailsDTO.getContent() );
         book.setRecommended_age( bookDetailsDTO.getRecommended_age() );
         book.setCategory( bookDetailsDTO.getCategory() );
         List<Favorite> list = bookDetailsDTO.getFavorites();

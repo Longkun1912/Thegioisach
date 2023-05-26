@@ -9,7 +9,7 @@ digital copy strictly for your personal enjoyment only. This edition must not be
 or redistributed on other websites without the author’s written permission nor offered
 for sale in any form. If you paid for this book, or to gain access to it, we suggest you
 demand an immediate refund and report the transaction to the author.',
-file_import('D:\thegioisach\src\main\resources\static\img\post\Mike_s-Japan.png'),
+'https://greenwichbook.blob.core.windows.net/thegioisach/post/Mike_s-Japan.png',
 timestamp '2022-12-11 22:34:10','a00e70ea-c6c2-11ed-afa1-0242ac120002'),
 
 ('77e36764-dc49-11ed-afa1-0242ac120002','Honest feedback of The Hammer of God',
@@ -19,7 +19,7 @@ I especially liked the comparison of the protagonists and individuals of the sto
 I thought that was a nice literary tip of the hat—don’t make God mad, Paris! Clarke certainly was a master of science fiction by the 1990s and he did not lose his mastery of suspense.<br><br>
 The science felt authentic and was enough to challenge my mind, while still staying entertaining enough because,after all, it’s fiction.
 I am impressed by Clarke’s storytelling and worldbuilding— The Arthur C. Clarke’s Hammer of God is a hardcore, run-of-the-mill sci-fi but delivered a fun ride all the same.',
-file_import('D:\thegioisach\src\main\resources\static\img\post\hammer-of-god.jpg'),
+'https://greenwichbook.blob.core.windows.net/thegioisach/post/hammer-of-god.jpg',
 timestamp '2022-11-02 13:45:00','6e7cc348-cbf8-11ed-afa1-0242ac120002');
 
 ---

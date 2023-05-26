@@ -64,17 +64,9 @@ public class CommentService {
 
     private CommentDTO configureCommentCreatorImage(Comment comment){
         User creator = comment.getUser();
-        //Declare byte[] for creator image
-        byte[] commentCreatorImage = creator.getImage();
-        Tika tika = new Tika();
-        // Configure for comment creator image
-        String creatorMimeType = tika.detect(commentCreatorImage);
-        String creatorBase64EncodedImage = Base64.getEncoder().encodeToString(commentCreatorImage);
-        UserImageData creatorImageData = new UserImageData(creator, creatorMimeType, creatorBase64EncodedImage);
         CommentDTO commentDTO = mapper.commentDto(comment);
         // Mapper for comment creator image
         UserDetailsDTO creator_detail = mapper.userDetailsDto(creator);
-        creator_detail.setUserImageData(creatorImageData);
         // Set creator image for post
         commentDTO.setCreator(creator_detail);
         return commentDTO;

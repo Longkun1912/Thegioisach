@@ -23,7 +23,7 @@ public class Post {
     private String title;
 
     @Column
-    private byte[] content_image;
+    private String content_image;
 
     @Column
     private String content_text;

@@ -39,13 +39,6 @@ public class PostService {
         List<PostDTO> community_posts = new ArrayList<>();
         for (Post post : posts){
             User creator = post.getCreator();
-            //Declare byte[] for creator image
-            byte[] postCreatorImage = creator.getImage();
-            Tika tika = new Tika();
-            // Configure for post creator image
-            String creatorMimeType = tika.detect(postCreatorImage);
-            String creatorBase64EncodedImage = Base64.getEncoder().encodeToString(postCreatorImage);
-            UserImageData creatorImageData = new UserImageData(creator, creatorMimeType, creatorBase64EncodedImage);
             // Mapper for post image
             PostDTO postDTO = mapper.postDto(post);
             // Format created_time for post
@@ -54,19 +47,9 @@ public class PostService {
             postDTO.setLast_updated(created_time.format(formatter));
             // Mapper for post creator image
             UserDetailsDTO creator_detail = mapper.userDetailsDto(creator);
-            creator_detail.setUserImageData(creatorImageData);
             // Set creator image for post
             postDTO.setCreator_detail(creator_detail);
             // Configure for post that contains image as content
-            if(post.getContent_image()!=null){
-                //Declare byte[] for post image
-                byte[] postContentImage = post.getContent_image();
-                // Configure for post image
-                String postMimeType = tika.detect(postContentImage);
-                String postBase64EncodedImage = Base64.getEncoder().encodeToString(postContentImage);
-                PostImageData postImageData = new PostImageData(post,postMimeType,postBase64EncodedImage);
-                postDTO.setPostImageData(postImageData);
-            }
             community_posts.add(postDTO);
         }
         return community_posts;
@@ -77,19 +60,6 @@ public class PostService {
         User user = userRepository.findUserByEmail(auth.getName()).get();
         Post post = mapper.postHandlingDtoToPost(postHandlingDTO);
         post.setId(UUID.randomUUID());
-        if (file != null){
-            System.out.println("File is found!");
-            // Get the original filename of the uploaded file
-            String originalFilename = file.getOriginalFilename();
-            // Extract the file extension
-            String extension = FilenameUtils.getExtension(originalFilename);
-            // Construct a new filename based on the post id
-            String newFilename = post.getId().toString() + "." + extension;
-            // Save the uploaded file to the specified directory
-            Path path = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\img\\post\\" + newFilename);
-            Files.write(path, file.getBytes());
-            post.setContent_image(file.getBytes());
-        }
         post.setCreator(user);
         post.setTitle(postHandlingDTO.getTitle());
         post.setContent_text(postHandlingDTO.getContent_text());
@@ -112,7 +82,6 @@ public class PostService {
             // Save the uploaded file to the specified directory
             Path post_path = Paths.get("D:\\thegioisach\\src\\main\\resources\\static\\img\\post\\" + newFilename);
             Files.write(post_path, file.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-            post.setContent_image(file.getBytes());
         }
         post.setTitle(title);
         post.setContent_text(content_text);

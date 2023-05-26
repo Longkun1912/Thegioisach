@@ -6,7 +6,7 @@ create table roles (
 create table users (
     id uuid primary key,
     username varchar(100),
-    image bytea,
+    image text,
     email varchar(200),
     phone_number varchar(11),
     status varchar(8),
@@ -19,7 +19,7 @@ create table users (
 create table posts (
     id uuid primary key,
     title varchar(200),
-    content_image bytea,
+    content_image text,
     content_text varchar(10000),
     created_time timestamp,
     user_post uuid not null,
@@ -54,8 +54,8 @@ create table books (
     published_date date,
     page int,
     description varchar(10000),
-    image bytea,
-    content bytea,
+    image text,
+    content text,
     recommended_age int,
     book_category int not null,
     foreign key(book_category) references categories(id)
@@ -96,3 +96,4 @@ create table rates (
     foreign key(user_rate) references users(id),
     foreign key(post_rate) references posts(id)
 )
+

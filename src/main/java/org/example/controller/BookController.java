@@ -148,8 +148,6 @@ public class BookController {
             LocalDate date = LocalDate.parse(published_date.trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
             // Map book entity and save to database
             Book book = mapper.BookDtoToBook(bookDTO);
-            book.setImage(bookDTO.getImage_file().getBytes());
-            book.setContent(bookDTO.getContent_file().getBytes());
             book.setCategory(categoryRepository.findCategoryByName(bookDTO.getCategory_name()).get());
             book.setRecommended_age(Integer.parseInt(bookDTO.getRecommended_age()));
             book.setPublished_date(date);
@@ -221,8 +219,6 @@ public class BookController {
             if(existing_book.isPresent()){
                 bookService.deleteBookFilePath(existing_book.get().getTitle());
                 Book book = mapper.BookDtoToBook(bookDTO);
-                book.setImage(bookDTO.getImage_file().getBytes());
-                book.setContent(bookDTO.getContent_file().getBytes());
                 book.setCategory(categoryRepository.findCategoryByName(bookDTO.getCategory_name()).get());
                 book.setRecommended_age(Integer.parseInt(bookDTO.getRecommended_age()));
                 book.setPublished_date(date);

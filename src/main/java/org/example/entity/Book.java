@@ -34,10 +34,10 @@ public class Book {
     private String description;
 
     @Column
-    private byte[] image;
+    private String image;
 
     @Column
-    private byte[] content;
+    private String content;
 
     @Column
     private int recommended_age;
